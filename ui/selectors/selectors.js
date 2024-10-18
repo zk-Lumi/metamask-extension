@@ -155,24 +155,29 @@ export function getNetworkIdentifier(state) {
 }
 
 export function getCurrentChainId(state) {
+  /*
   const { chainId } = getProviderConfig(state);
+  */
+
+  // TODO: Fallback chainID should be from Settings, NOT getProviderConfig
+  const FALLBACK_CHAIN_ID = CHAIN_IDS.MAINNET;
 
   if (state.metamask.domains === undefined) {
     console.info(
-      `[getCurrentChainId] state.metamask.domains is undefined, returning global chainId (${chainId})`,
+      `[getCurrentChainId] state.metamask.domains is undefined, returning global chainId (${FALLBACK_CHAIN_ID})`,
     );
-    return chainId;
+    return FALLBACK_CHAIN_ID;
   }
 
   const networkClientId =
     state.metamask.domains[state.activeTab?.origin || ORIGIN_METAMASK];
   if (!networkClientId) {
     console.info(
-      `[getCurrentChainId] no networkClientId found, returning global chainId (${chainId})`,
+      `[getCurrentChainId] no networkClientId found, returning global chainId (${FALLBACK_CHAIN_ID})`,
       state.metamask.domains || '(no domains)',
       state.activeTab?.origin || '(no origin)',
     );
-    return chainId;
+    return FALLBACK_CHAIN_ID;
   }
 
   // Search for chainId based on networkClientId
@@ -194,10 +199,10 @@ export function getCurrentChainId(state) {
 
   if (pageChainId === null) {
     console.info(
-      `[getCurrentChainId] no pageChainId found for ${networkClientId}; returning global chainId: ${chainId}`,
+      `[getCurrentChainId] no pageChainId found for ${networkClientId}; returning global chainId: ${FALLBACK_CHAIN_ID}`,
       state.metamask.networkConfigurationsByChainId,
     );
-    return chainId;
+    return FALLBACK_CHAIN_ID;
   }
 
   console.info(
