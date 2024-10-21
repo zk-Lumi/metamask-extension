@@ -15,13 +15,15 @@ import {
 } from '../utils/quote';
 import { useCountdownTimer } from '../../../hooks/bridge/useCountdownTimer';
 import MascotBackgroundAnimation from '../../swaps/mascot-background-animation/mascot-background-animation';
-import { getCurrentCurrency } from '../../../selectors';
-import { getNativeCurrency } from '../../../ducks/metamask/metamask';
 import { useCrossChainSwapsEventTracker } from '../../../hooks/bridge/useCrossChainSwapsEventTracker';
 import { useRequestProperties } from '../../../hooks/bridge/events/useRequestProperties';
 import { useRequestMetadataProperties } from '../../../hooks/bridge/events/useRequestMetadataProperties';
 import { useQuoteProperties } from '../../../hooks/bridge/events/useQuoteProperties';
 import { MetaMetricsEventName } from '../../../../shared/constants/metametrics';
+import {
+  getCurrentCurrency,
+  getNativeCurrency,
+} from '../../../ducks/metamask/metamask';
 import { BridgeQuotesModal } from './bridge-quotes-modal';
 import { QuoteInfoRow } from './quote-info-row';
 
