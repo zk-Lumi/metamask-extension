@@ -5,7 +5,7 @@ import {
   getQuoteRequest,
   getToChain,
 } from '../../ducks/bridge/selectors';
-import { getCurrentCurrency, getMarketData } from '../../selectors';
+import { getMarketData } from '../../selectors';
 import { decimalToPrefixedHex } from '../../../shared/modules/conversion.utils';
 import { getCurrentChainId } from '../../../shared/modules/selectors/networks';
 import {
@@ -13,6 +13,7 @@ import {
   setSrcTokenExchangeRates,
 } from '../../ducks/bridge/bridge';
 import { exchangeRateFromMarketData } from '../../ducks/bridge/utils';
+import { getCurrentCurrency } from '../../ducks/metamask/metamask';
 
 export const useBridgeExchangeRates = () => {
   const { srcTokenAddress, destTokenAddress } = useSelector(getQuoteRequest);

@@ -32,10 +32,10 @@ import { useI18nContext } from '../../../../hooks/useI18nContext';
 ///: END:ONLY_INCLUDE_IF
 import { NetworkListItem } from '../../network-list-item';
 import { getNetworkConfigurationsByChainId } from '../../../../../shared/modules/selectors/networks';
-import { getCurrentCurrency } from '../../../../selectors';
 import { formatCurrency } from '../../../../helpers/utils/confirm-tx.util';
 import { useMultichainBalances } from '../../../../hooks/useMultichainBalances';
 import { NETWORK_TO_SHORT_NETWORK_NAME_MAP } from '../../../../../shared/constants/bridge';
+import { getCurrentCurrency } from '../../../../ducks/metamask/metamask';
 
 /**
  * AssetPickerModalNetwork component displays a modal for selecting a network in the asset picker.

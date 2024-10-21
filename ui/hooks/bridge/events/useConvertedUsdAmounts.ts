@@ -8,8 +8,9 @@ import {
   getToTokenConversionRate,
   getFromAmount,
 } from '../../../ducks/bridge/selectors';
-import { getCurrentCurrency, getUSDConversionRate } from '../../../selectors';
+import { getUSDConversionRate } from '../../../selectors';
 import { tokenAmountToCurrency } from '../../../ducks/bridge/utils';
+import { getCurrentCurrency } from '../../../ducks/metamask/metamask';
 
 const USD_CURRENCY_CODE = 'usd';
 

@@ -2,7 +2,6 @@ import React from 'react';
 import { useSelector } from 'react-redux';
 import { BigNumber } from 'bignumber.js';
 import {
-  getCurrentCurrency,
   getNetworkConfigurationIdByChainId,
   getTokenList,
 } from '../../../../selectors';
@@ -13,6 +12,7 @@ import { formatAmount } from '../../../../pages/confirmations/components/simulat
 import { getIntlLocale } from '../../../../ducks/locale/locale';
 import { CHAIN_ID_TO_NETWORK_IMAGE_URL_MAP } from '../../../../../shared/constants/network';
 import { formatCurrency } from '../../../../helpers/utils/confirm-tx.util';
+import { getCurrentCurrency } from '../../../../ducks/metamask/metamask';
 import { AssetWithDisplayData, ERC20Asset, NativeAsset } from './types';
 
 type AssetProps = AssetWithDisplayData<NativeAsset | ERC20Asset> & {
