@@ -26,7 +26,7 @@ import { useTransactionDisplayData } from './useTransactionDisplayData';
 
 const expectedResults = [
   {
-    title: 'Send',
+    title: 'Sent',
     category: TransactionGroupCategory.send,
     subtitle: 'To: 0xffe5b...91a97',
     subtitleContainsOrigin: false,
@@ -40,7 +40,7 @@ const expectedResults = [
     isSubmitted: false,
   },
   {
-    title: 'Send',
+    title: 'Sent',
     category: TransactionGroupCategory.send,
     subtitle: 'To: 0x0ccc8...f8848',
     subtitleContainsOrigin: false,
@@ -53,7 +53,7 @@ const expectedResults = [
     displayedStatusKey: TransactionStatus.confirmed,
   },
   {
-    title: 'Send',
+    title: 'Sent',
     category: TransactionGroupCategory.send,
     subtitle: 'To: 0xffe5b...91a97',
     subtitleContainsOrigin: false,

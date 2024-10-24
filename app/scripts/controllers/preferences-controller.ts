@@ -120,6 +120,7 @@ export type Preferences = {
     order: string;
     sortCallback: string;
   };
+  activityNetworkFilter: Record<string, boolean>;
   tokenNetworkFilter: Record<string, boolean>;
   shouldShowAggregatedBalancePopover: boolean;
 };
@@ -223,6 +224,7 @@ export const getDefaultPreferencesControllerState =
         order: 'dsc',
         sortCallback: 'stringNumeric',
       },
+      activityNetworkFilter: {},
       tokenNetworkFilter: {},
     },
     // ENS decentralized website resolution

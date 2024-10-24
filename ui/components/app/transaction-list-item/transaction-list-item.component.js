@@ -5,7 +5,7 @@ import classnames from 'classnames';
 import { useHistory } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 
-import { TransactionStatus } from '@metamask/transaction-controller';
+import { CHAIN_IDS, TransactionStatus } from '@metamask/transaction-controller';
 import { useTransactionDisplayData } from '../../../hooks/useTransactionDisplayData';
 import { useI18nContext } from '../../../hooks/useI18nContext';
 
@@ -16,10 +16,14 @@ import TransactionStatusLabel from '../transaction-status-label/transaction-stat
 import TransactionIcon from '../transaction-icon';
 import {
   BackgroundColor,
+  BorderColor,
+  BorderStyle,
   Color,
   Display,
   FontWeight,
+  JustifyContent,
   TextAlign,
+  TextColor,
   TextVariant,
 } from '../../../helpers/constants/design-system';
 import {
@@ -28,6 +32,8 @@ import {
   BadgeWrapper,
   BadgeWrapperAnchorElementShape,
   Box,
+  ButtonBase,
+  ButtonBaseSize,
   Text,
 } from '../../component-library';
 
@@ -52,7 +58,6 @@ import {
 import {
   checkNetworkAndAccountSupports1559,
   getCurrentNetwork,
-  getTestNetworkBackgroundColor,
 } from '../../../selectors';
 import { isLegacyTransaction } from '../../../helpers/utils/transactions.util';
 import { formatDateWithYearContext } from '../../../helpers/utils/util';
@@ -66,11 +71,16 @@ import { MetaMetricsContext } from '../../../contexts/metametrics';
 import { ActivityListItem } from '../../multichain';
 import { abortTransactionSigning } from '../../../store/actions';
 import { getIsSmartTransaction } from '../../../../shared/modules/selectors';
+import {
+  CHAIN_ID_TO_NETWORK_IMAGE_URL_MAP,
+  NETWORK_TO_NAME_MAP,
+} from '../../../../shared/constants/network';
 
 function TransactionListItemInner({
   transactionGroup,
   setEditGasMode,
   isEarliestNonce = false,
+  chainId,
 }) {
   const t = useI18nContext();
   const history = useHistory();
@@ -81,9 +91,19 @@ function TransactionListItemInner({
   const [showRetryEditGasPopover, setShowRetryEditGasPopover] = useState(false);
   const { supportsEIP1559 } = useGasFeeContext();
   const { openModal } = useTransactionModalContext();
-  const testNetworkBackgroundColor = useSelector(getTestNetworkBackgroundColor);
   const isSmartTransaction = useSelector(getIsSmartTransaction);
   const dispatch = useDispatch();
+
+  const getTestNetworkBackgroundColor = (chainId) => {
+    switch (true) {
+      case chainId === CHAIN_IDS.GOERLI:
+        return BackgroundColor.goerli;
+      case chainId === CHAIN_IDS.SEPOLIA:
+        return BackgroundColor.sepolia;
+      default:
+        return undefined;
+    }
+  };
 
   const {
     initialTransaction: { id },
@@ -159,6 +179,7 @@ function TransactionListItemInner({
     isPending,
     senderAddress,
   } = useTransactionDisplayData(transactionGroup);
+
   const date = formatDateWithYearContext(
     transactionGroup.primaryTransaction.time,
     'MMM d, y',
@@ -186,6 +207,21 @@ function TransactionListItemInner({
         TransactionStatus.rejected,
       ].includes(displayedStatusKey),
   });
+
+  const ellipsisMiddle = (text, maxLength) => {
+    if (!text) {
+      return;
+    }
+
+    if (text?.length <= maxLength) {
+      return text;
+    }
+
+    const startLength = Math.ceil(maxLength / 2);
+    const endLength = maxLength - startLength - 3; // Adjust for the ellipsis length
+
+    return `${text.slice(0, startLength)}...${text.slice(-endLength)}`;
+  };
 
   const toggleShowDetails = useCallback(() => {
     if (isUnapproved) {
@@ -316,17 +352,20 @@ function TransactionListItemInner({
                   className="activity-tx__network-badge"
                   data-testid="activity-tx-network-badge"
                   size={AvatarNetworkSize.Xs}
-                  name={currentChain?.nickname}
-                  src={currentChain?.rpcPrefs?.imageUrl}
+                  name={NETWORK_TO_NAME_MAP[chainId]}
+                  src={CHAIN_ID_TO_NETWORK_IMAGE_URL_MAP[chainId]}
                   borderWidth={1}
                   borderColor={BackgroundColor.backgroundDefault}
-                  backgroundColor={testNetworkBackgroundColor}
+                  backgroundColor={getTestNetworkBackgroundColor(chainId)}
                 />
               }
             >
-              <TransactionIcon
-                category={category}
-                status={displayedStatusKey}
+              <AvatarNetwork
+                size={AvatarNetworkSize.Md}
+                name={NETWORK_TO_NAME_MAP[chainId]}
+                src={CHAIN_ID_TO_NETWORK_IMAGE_URL_MAP[chainId]}
+                backgroundColor={getTestNetworkBackgroundColor(chainId)}
+                data-testid="activity-tx-network-badge"
               />
             </BadgeWrapper>
             ///: BEGIN:ONLY_INCLUDE_IF(build-mmi)
@@ -334,20 +373,11 @@ function TransactionListItemInner({
           ///: END:ONLY_INCLUDE_IF
         }
         subtitle={
-          <TransactionStatusLabel
-            statusOnly
-            isPending={isPending}
-            isEarliestNonce={isEarliestNonce}
-            error={error}
-            date={date}
-            status={displayedStatusKey}
-            ///: BEGIN:ONLY_INCLUDE_IF(build-mmi)
-            custodyStatus={transactionGroup.primaryTransaction.custodyStatus}
-            custodyStatusDisplayText={
-              transactionGroup.primaryTransaction.custodyStatusDisplayText
-            }
-            ///: END:ONLY_INCLUDE_IF
-          />
+          <Text variant={TextVariant.bodySm} color={TextColor.textAlternative}>
+            {recipientAddress
+              ? `${t('to')}: ${ellipsisMiddle(recipientAddress, 15)}`
+              : null}
+          </Text>
         }
         rightContent={
           !isSignatureReq &&
@@ -357,13 +387,13 @@ function TransactionListItemInner({
                 variant={TextVariant.bodyLgMedium}
                 fontWeight={FontWeight.Medium}
                 color={Color.textDefault}
-                title={primaryCurrency}
+                title={secondaryCurrency}
                 textAlign={TextAlign.Right}
                 data-testid="transaction-list-item-primary-currency"
                 className="activity-list-item__primary-currency"
                 ellipsis
               >
-                {primaryCurrency}
+                {secondaryCurrency}
               </Text>
               <Text
                 variant={TextVariant.bodyMd}
@@ -371,7 +401,7 @@ function TransactionListItemInner({
                 textAlign={TextAlign.Right}
                 data-testid="transaction-list-item-secondary-currency"
               >
-                {secondaryCurrency}
+                {primaryCurrency}
               </Text>
             </>
           )
@@ -465,6 +495,7 @@ TransactionListItemInner.propTypes = {
   transactionGroup: PropTypes.object.isRequired,
   isEarliestNonce: PropTypes.bool,
   setEditGasMode: PropTypes.func,
+  chainId: PropTypes.string,
 };
 
 const TransactionListItem = (props) => {
