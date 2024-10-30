@@ -232,6 +232,11 @@ export default function TransactionList({
     ],
   );
 
+  console.log(
+    'unfilteredCompletedTransactions ******',
+    unfilteredCompletedTransactions,
+  );
+
   const chainId = useSelector(getCurrentChainId);
   const selectedAccount = useSelector(getSelectedAccount);
 

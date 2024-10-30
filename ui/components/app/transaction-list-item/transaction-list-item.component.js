@@ -16,14 +16,10 @@ import TransactionStatusLabel from '../transaction-status-label/transaction-stat
 import TransactionIcon from '../transaction-icon';
 import {
   BackgroundColor,
-  BorderColor,
-  BorderStyle,
   Color,
   Display,
   FontWeight,
-  JustifyContent,
   TextAlign,
-  TextColor,
   TextVariant,
 } from '../../../helpers/constants/design-system';
 import {
@@ -32,8 +28,6 @@ import {
   BadgeWrapper,
   BadgeWrapperAnchorElementShape,
   Box,
-  ButtonBase,
-  ButtonBaseSize,
   Text,
 } from '../../component-library';
 
@@ -55,10 +49,7 @@ import {
   TransactionModalContextProvider,
   useTransactionModalContext,
 } from '../../../contexts/transaction-modal';
-import {
-  checkNetworkAndAccountSupports1559,
-  getCurrentNetwork,
-} from '../../../selectors';
+import { checkNetworkAndAccountSupports1559 } from '../../../selectors';
 import { isLegacyTransaction } from '../../../helpers/utils/transactions.util';
 import { formatDateWithYearContext } from '../../../helpers/utils/util';
 import Button from '../../ui/button';
@@ -94,11 +85,11 @@ function TransactionListItemInner({
   const isSmartTransaction = useSelector(getIsSmartTransaction);
   const dispatch = useDispatch();
 
-  const getTestNetworkBackgroundColor = (chainId) => {
+  const getTestNetworkBackgroundColor = (networkId) => {
     switch (true) {
-      case chainId === CHAIN_IDS.GOERLI:
+      case networkId === CHAIN_IDS.GOERLI:
         return BackgroundColor.goerli;
-      case chainId === CHAIN_IDS.SEPOLIA:
+      case networkId === CHAIN_IDS.SEPOLIA:
         return BackgroundColor.sepolia;
       default:
         return undefined;
@@ -208,21 +199,6 @@ function TransactionListItemInner({
       ].includes(displayedStatusKey),
   });
 
-  const ellipsisMiddle = (text, maxLength) => {
-    if (!text) {
-      return;
-    }
-
-    if (text?.length <= maxLength) {
-      return text;
-    }
-
-    const startLength = Math.ceil(maxLength / 2);
-    const endLength = maxLength - startLength - 3; // Adjust for the ellipsis length
-
-    return `${text.slice(0, startLength)}...${text.slice(-endLength)}`;
-  };
-
   const toggleShowDetails = useCallback(() => {
     if (isUnapproved) {
       history.push(`${CONFIRM_TRANSACTION_ROUTE}/${id}`);
@@ -295,7 +271,6 @@ function TransactionListItemInner({
     isCustodian,
     ///: END:ONLY_INCLUDE_IF
   ]);
-  const currentChain = useSelector(getCurrentNetwork);
   let showCancelButton =
     !hasCancelled && isPending && !isUnapproved && !isSubmitting;
 
@@ -360,12 +335,9 @@ function TransactionListItemInner({
                 />
               }
             >
-              <AvatarNetwork
-                size={AvatarNetworkSize.Md}
-                name={NETWORK_TO_NAME_MAP[chainId]}
-                src={CHAIN_ID_TO_NETWORK_IMAGE_URL_MAP[chainId]}
-                backgroundColor={getTestNetworkBackgroundColor(chainId)}
-                data-testid="activity-tx-network-badge"
+              <TransactionIcon
+                category={category}
+                status={displayedStatusKey}
               />
             </BadgeWrapper>
             ///: BEGIN:ONLY_INCLUDE_IF(build-mmi)
@@ -373,11 +345,20 @@ function TransactionListItemInner({
           ///: END:ONLY_INCLUDE_IF
         }
         subtitle={
-          <Text variant={TextVariant.bodySm} color={TextColor.textAlternative}>
-            {recipientAddress
-              ? `${t('to')}: ${ellipsisMiddle(recipientAddress, 15)}`
-              : null}
-          </Text>
+          <TransactionStatusLabel
+            statusOnly
+            isPending={isPending}
+            isEarliestNonce={isEarliestNonce}
+            error={error}
+            date={date}
+            status={displayedStatusKey}
+            ///: BEGIN:ONLY_INCLUDE_IF(build-mmi)
+            custodyStatus={transactionGroup.primaryTransaction.custodyStatus}
+            custodyStatusDisplayText={
+              transactionGroup.primaryTransaction.custodyStatusDisplayText
+            }
+            ///: END:ONLY_INCLUDE_IF
+          />
         }
         rightContent={
           !isSignatureReq &&

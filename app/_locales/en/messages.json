@@ -4842,9 +4842,6 @@
   "sendingZeroAmount": {
     "message": "You are sending 0 $1."
   },
-  "sent": {
-    "message": "Sent"
-  },
   "sepolia": {
     "message": "Sepolia test network"
   },

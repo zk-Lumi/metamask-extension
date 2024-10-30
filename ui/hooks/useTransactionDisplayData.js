@@ -355,7 +355,7 @@ export function useTransactionDisplayData(transactionGroup) {
     subtitle = t('toAddress', [shortenAddress(recipientAddress)]);
   } else if (type === TransactionType.simpleSend) {
     category = TransactionGroupCategory.send;
-    title = isPending ? t('send') : t('sent');
+    title = t('send');
     subtitle = t('toAddress', [shortenAddress(recipientAddress)]);
   } else {
     dispatch(

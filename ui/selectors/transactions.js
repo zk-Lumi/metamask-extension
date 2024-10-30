@@ -283,7 +283,7 @@ export const transactionsSelector = createSelector(
 
 export const transactionsSelectorAllChains = createSelector(
   transactionSubSelectorAllChains,
-  selectedAddressTxListSelector,
+  selectedAddressTxListSelectorAllChain,
   (subSelectorTxList = [], selectedAddressTxList = []) => {
     const txsToRender = selectedAddressTxList.concat(subSelectorTxList);
 
