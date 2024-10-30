@@ -368,13 +368,13 @@ function TransactionListItemInner({
                 variant={TextVariant.bodyLgMedium}
                 fontWeight={FontWeight.Medium}
                 color={Color.textDefault}
-                title={secondaryCurrency}
+                title={primaryCurrency}
                 textAlign={TextAlign.Right}
                 data-testid="transaction-list-item-primary-currency"
                 className="activity-list-item__primary-currency"
                 ellipsis
               >
-                {secondaryCurrency}
+                {primaryCurrency}
               </Text>
               <Text
                 variant={TextVariant.bodyMd}
@@ -382,7 +382,7 @@ function TransactionListItemInner({
                 textAlign={TextAlign.Right}
                 data-testid="transaction-list-item-secondary-currency"
               >
-                {primaryCurrency}
+                {secondaryCurrency}
               </Text>
             </>
           )
