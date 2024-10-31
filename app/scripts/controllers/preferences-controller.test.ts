@@ -751,7 +751,6 @@ describe('preferences controller', () => {
           sortCallback: 'stringNumeric',
         },
         tokenNetworkFilter: {},
-        activityNetworkFilter: {},
       });
     });
 
@@ -782,7 +781,6 @@ describe('preferences controller', () => {
           sortCallback: 'stringNumeric',
         },
         tokenNetworkFilter: {},
-        activityNetworkFilter: {},
       });
     });
   });

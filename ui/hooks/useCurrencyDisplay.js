@@ -9,10 +9,14 @@ import {
 } from '../selectors/multichain';
 
 import { getValueFromWeiHex } from '../../shared/modules/conversion.utils';
-import { TEST_NETWORK_TICKER_MAP } from '../../shared/constants/network';
+import {
+  CHAIN_ID_TO_CURRENCY_SYMBOL_MAP,
+  TEST_NETWORK_TICKER_MAP,
+} from '../../shared/constants/network';
 import { Numeric } from '../../shared/modules/Numeric';
 import { EtherDenomination } from '../../shared/constants/common';
 import { getTokenFiatAmount } from '../helpers/utils/token-util';
+import { getCurrencyRates } from '../ducks/metamask/metamask';
 import { useMultichainSelector } from './useMultichainSelector';
 
 // The smallest non-zero amount that can be displayed.
@@ -124,6 +128,7 @@ function formatBtcCurrencyDisplay({
  *
  * @param {string} inputValue - The value to format for display
  * @param {UseCurrencyOptions} opts - An object for options to format the inputValue
+ * @param {chainId} chainId - chainId to use
  * @returns {[string, CurrencyDisplayParts]}
  */
 export function useCurrencyDisplay(
@@ -138,13 +143,13 @@ export function useCurrencyDisplay(
     isAggregatedFiatOverviewBalance,
     ...opts
   },
+  chainId = null,
 ) {
   const isEvm = useMultichainSelector(getMultichainIsEvm, account);
   const currentCurrency = useMultichainSelector(
     getMultichainCurrentCurrency,
     account,
   );
-
   const nativeCurrency = useMultichainSelector(
     getMultichainNativeCurrency,
     account,
@@ -154,8 +159,11 @@ export function useCurrencyDisplay(
     account,
   );
 
+  const currencyRates = useMultichainSelector(getCurrencyRates, account);
   const isUserPreferredCurrency = currency === currentCurrency;
-  const isNativeCurrency = currency === nativeCurrency;
+  const isNativeCurrency =
+    currency === nativeCurrency ||
+    currency === CHAIN_ID_TO_CURRENCY_SYMBOL_MAP[chainId];
 
   const value = useMemo(() => {
     if (displayValue) {
@@ -185,7 +193,10 @@ export function useCurrencyDisplay(
       currency,
       nativeCurrency,
       inputValue,
-      conversionRate,
+      conversionRate: chainId
+        ? currencyRates?.[CHAIN_ID_TO_CURRENCY_SYMBOL_MAP[chainId]]
+            ?.conversionRate
+        : conversionRate,
       denomination,
       numberOfDecimals,
     });
@@ -202,6 +213,8 @@ export function useCurrencyDisplay(
     numberOfDecimals,
     currentCurrency,
     isAggregatedFiatOverviewBalance,
+    chainId,
+    currencyRates,
   ]);
 
   let suffix;

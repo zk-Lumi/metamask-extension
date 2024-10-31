@@ -187,10 +187,8 @@ export default function TransactionList({
 }) {
   const [limit, setLimit] = useState(PAGE_INCREMENT);
   const t = useI18nContext();
-  const { activityNetworkFilter } = useSelector(getPreferences);
-  const allNetworksFilterShown = Object.keys(
-    activityNetworkFilter ?? {},
-  ).length;
+  const { tokenNetworkFilter } = useSelector(getPreferences);
+  const allNetworksFilterShown = Object.keys(tokenNetworkFilter ?? {}).length;
 
   const unfilteredPendingTransactionsCurrentChain = useSelector(
     nonceSortedPendingTransactionsSelector,
@@ -230,11 +228,6 @@ export default function TransactionList({
       unfilteredCompletedTransactionsAllChains,
       unfilteredCompletedTransactionsCurrentChain,
     ],
-  );
-
-  console.log(
-    'unfilteredCompletedTransactions ******',
-    unfilteredCompletedTransactions,
   );
 
   const chainId = useSelector(getCurrentChainId);
@@ -399,7 +392,7 @@ export default function TransactionList({
             minWidth: isFullScreen ? '325px' : '',
           }}
         >
-          <NetworkFilter handleClose={closePopover} isActivityFilter />
+          <NetworkFilter handleClose={closePopover} />
         </Popover>
       </Box>
     );
@@ -455,7 +448,7 @@ export default function TransactionList({
       }
       <Box className="transaction-list" {...boxProps}>
         <Box className="transaction-list__transactions">
-          {renderFilterButton()}
+          {process.env.FILTER_TOKENS_TOGGLE && renderFilterButton()}
           {pendingTransactions.length > 0 && (
             <Box className="transaction-list__pending-transactions">
               {pendingTransactions.map((dateGroup) => {
@@ -492,6 +485,7 @@ export default function TransactionList({
               })}
             </Box>
           )}
+
           <Box className="transaction-list__completed-transactions">
             {completedTransactions.length > 0 ? (
               completedTransactions

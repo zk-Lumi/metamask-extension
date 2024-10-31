@@ -1,9 +1,6 @@
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import {
-  setTokenNetworkFilter,
-  setActivityNetworkFilter,
-} from '../../../../../store/actions';
+import { setTokenNetworkFilter } from '../../../../../store/actions';
 import {
   getCurrentChainId,
   getCurrentNetwork,
@@ -30,13 +27,9 @@ import { CHAIN_ID_TO_NETWORK_IMAGE_URL_MAP } from '../../../../../../shared/cons
 
 type SortControlProps = {
   handleClose: () => void;
-  isActivityFilter?: boolean;
 };
 
-const NetworkFilter = ({
-  handleClose,
-  isActivityFilter = false,
-}: SortControlProps) => {
+const NetworkFilter = ({ handleClose }: SortControlProps) => {
   const t = useI18nContext();
   const dispatch = useDispatch();
   const chainId = useSelector(getCurrentChainId);
@@ -44,11 +37,8 @@ const NetworkFilter = ({
   const currentNetwork = useSelector(getCurrentNetwork);
   const allNetworks = useSelector(getNetworkConfigurationsByChainId);
   const isTestnet = useSelector(getIsTestnet);
-  const {
-    tokenNetworkFilter,
-    activityNetworkFilter,
-    showNativeTokenAsMainBalance,
-  } = useSelector(getPreferences);
+  const { tokenNetworkFilter, showNativeTokenAsMainBalance } =
+    useSelector(getPreferences);
   const shouldHideZeroBalanceTokens = useSelector(
     getShouldHideZeroBalanceTokens,
   );
@@ -60,9 +50,7 @@ const NetworkFilter = ({
   // const multiNetworkAccountBalance = useMultichainAccountBalance()
 
   const handleFilter = (chainFilters: Record<string, boolean>) => {
-    isActivityFilter
-      ? dispatch(setActivityNetworkFilter(chainFilters))
-      : dispatch(setTokenNetworkFilter(chainFilters));
+    dispatch(setTokenNetworkFilter(chainFilters));
 
     // TODO Add metrics
     handleClose();
@@ -71,11 +59,7 @@ const NetworkFilter = ({
   return (
     <>
       <SelectableListItem
-        isSelected={
-          isActivityFilter
-            ? !Object.keys(activityNetworkFilter).length
-            : !Object.keys(tokenNetworkFilter).length
-        }
+        isSelected={!Object.keys(tokenNetworkFilter).length}
         onClick={() => handleFilter({})}
       >
         <Box
@@ -122,11 +106,7 @@ const NetworkFilter = ({
         </Box>
       </SelectableListItem>
       <SelectableListItem
-        isSelected={
-          isActivityFilter
-            ? activityNetworkFilter[chainId]
-            : tokenNetworkFilter[chainId]
-        }
+        isSelected={tokenNetworkFilter[chainId]}
         onClick={() => handleFilter({ [chainId]: true })}
       >
         <Box

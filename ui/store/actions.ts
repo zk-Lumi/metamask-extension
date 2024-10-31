@@ -3117,10 +3117,6 @@ export function setTokenNetworkFilter(value: Record<string, boolean>) {
   return setPreference('tokenNetworkFilter', value, false);
 }
 
-export function setActivityNetworkFilter(value: Record<string, boolean>) {
-  return setPreference('activityNetworkFilter', value, false);
-}
-
 export function setSmartTransactionsPreferenceEnabled(
   value: boolean,
 ): ThunkAction<void, MetaMaskReduxState, unknown, AnyAction> {

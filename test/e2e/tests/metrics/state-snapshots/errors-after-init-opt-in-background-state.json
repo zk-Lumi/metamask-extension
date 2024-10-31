@@ -223,7 +223,6 @@
       "redesignedTransactionsEnabled": "boolean",
       "tokenSortConfig": "object",
       "tokenNetworkFilter": "object",
-      "activityNetworkFilter": "object",
       "shouldShowAggregatedBalancePopover": "boolean"
     },
     "ipfsGateway": "string",

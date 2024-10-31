@@ -134,7 +134,6 @@
         "isRedesignedConfirmationsDeveloperEnabled": "boolean",
         "showConfirmationAdvancedDetails": false,
         "tokenSortConfig": "object",
-        "activityNetworkFilter": "object",
         "tokenNetworkFilter": "object",
         "showMultiRpcModal": "boolean",
         "shouldShowAggregatedBalancePopover": "boolean"

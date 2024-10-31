@@ -399,7 +399,6 @@ const mergeNonNonceTransactionGroups = (
   });
 };
 
-// Helper function to process and group transactions by nonce
 const groupAndSortTransactionsByNonce = (transactions) => {
   const unapprovedTransactionGroups = [];
   const incomingTransactionGroups = [];
@@ -415,7 +414,10 @@ const groupAndSortTransactionsByNonce = (transactions) => {
       txReceipt,
     } = transaction;
 
-    // Determine if transaction should not be grouped by nonce
+    // Don't group transactions by nonce if:
+    // 1. Tx nonce is undefined
+    // 2. Tx is incoming (deposit)
+    // 3. Tx is custodial (mmi specific)
     let shouldNotBeGrouped =
       typeof nonce === 'undefined' || type === TransactionType.incoming;
 
@@ -451,18 +453,60 @@ const groupAndSortTransactionsByNonce = (transactions) => {
       } = nonceProps;
 
       const currentTransaction = {
+        // A on-chain failure means the current transaction was submitted and
+        // considered for inclusion in a block but something prevented it
+        // from being included, such as slippage on gas prices and conversion
+        // when doing a swap. These transactions will have a '0x0' value in
+        // the txReceipt.status field.
         isOnChainFailure: txReceipt?.status === '0x0',
+        // Another type of failure is a "off chain" or "network" failure,
+        // where the error occurs on the JSON RPC call to the network client
+        // (Like Infura). These transactions are never broadcast for
+        // inclusion and the nonce associated with them is not consumed. When
+        // this occurs  the next transaction will have the same nonce as the
+        // current, failed transaction. A failed on chain transaction will
+        // not have the FAILED status although it should (future TODO: add a
+        // new FAILED_ON_CHAIN) status. I use the word "Ephemeral" here
+        // because a failed transaction that does not get broadcast is not
+        // known outside of the user's local MetaMask and the nonce
+        // associated will be applied to the next.
         isEphemeral:
           status === TransactionStatus.failed && txReceipt?.status !== '0x0',
+        // We never want to use a speed up (retry) or cancel as the initial
+        // transaction in a group, regardless of time order. This is because
+        // useTransactionDisplayData cannot parse a retry or cancel because
+        // it lacks information on whether it's a simple send, token transfer,
+        // etc.
         isRetryOrCancel: INVALID_INITIAL_TRANSACTION_TYPES.includes(type),
+        // Primary transactions usually are the latest transaction by time,
+        // but not always. This value shows whether this transaction occurred
+        // after the current primary.
         occurredAfterPrimary: txTime > primaryTxTime,
+        // Priority Statuses are those that are either already confirmed
+        // on-chain, submitted to the network, or waiting for user approval.
+        // These statuses typically indicate a transaction that needs to have
+        // its status reflected in the UI.
         hasPriorityStatus: status in PRIORITY_STATUS_HASH,
+        // A confirmed transaction is the most valid transaction status to
+        // display because no other transaction of the same nonce can have a
+        // more valid status.
         isConfirmed: status === TransactionStatus.confirmed,
+        // Initial transactions usually are the earliest transaction by time,
+        // but not always. This value shows whether this transaction occurred
+        // before the current initial.
         occurredBeforeInitial: txTime < initialTxTime,
+        // We only allow users to retry the transaction in certain scenarios
+        // to help shield from expensive operations and other unwanted side
+        // effects. This value is used to determine if the entire transaction
+        // group should be marked as having had a retry.
         isValidRetry:
           type === TransactionType.retry &&
           (status in PRIORITY_STATUS_HASH ||
             status === TransactionStatus.dropped),
+        // We only allow users to cancel the transaction in certain scenarios
+        // to help shield from expensive operations and other unwanted side
+        // effects. This value is used to determine if the entire transaction
+        // group should be marked as having had a cancel.
         isValidCancel:
           type === TransactionType.cancel &&
           (status in PRIORITY_STATUS_HASH ||
