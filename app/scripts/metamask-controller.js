@@ -4799,18 +4799,27 @@ export default class MetamaskController extends EventEmitter {
   /**
    * Set account name that checks for identical label
    *
-   * @param account
-   * @param index
-   * @param hwDeviceName
-   * @param hdPathDescription
+   * @param {string} accountId - Account ID
+   * @param {number} index - Index of the account in the accounts list
+   * @param {string} hardwareDeviceName - Name of the hardware device (Onekey, Ledger, etc)
+   * @param {string} hdPathDescription - HD path description
    */
-  setAccountName(account, index, hwDeviceName, hdPathDescription) {
-    const label = this.getAccountLabel(hwDeviceName, index, hdPathDescription);
+  setAccountName(accountId, index, hardwareDeviceName, hdPathDescription) {
+    const label = this.getAccountLabel(
+      hardwareDeviceName,
+      index,
+      hdPathDescription,
+    );
     try {
-      this.accountsController.setAccountName(account.id, label);
+      this.accountsController.setAccountName(accountId, label);
     } catch {
       const newIndex = index + 1;
-      this.setAccountName(account, newIndex, hwDeviceName, hdPathDescription);
+      this.setAccountName(
+        accountId,
+        newIndex,
+        hardwareDeviceName,
+        hdPathDescription,
+      );
     }
   }
 
@@ -4833,11 +4842,16 @@ export default class MetamaskController extends EventEmitter {
     keyring.setAccountToUnlock(index);
     const unlockedAccount =
       await this.keyringController.addNewAccountForKeyring(keyring);
-    const hwDeviceName =
+    const hardwareDeviceName =
       deviceName === HardwareDeviceNames.qr ? keyring.getName() : deviceName;
     const account =
       this.accountsController.getAccountByAddress(unlockedAccount);
-    this.setAccountName(account, index, hwDeviceName, hdPathDescription);
+    this.setAccountName(
+      account?.id,
+      index,
+      hardwareDeviceName,
+      hdPathDescription,
+    );
 
     this.preferencesController.setSelectedAddress(unlockedAccount);
     const accounts = this.accountsController.listAccounts();
