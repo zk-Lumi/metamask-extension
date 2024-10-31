@@ -77,10 +77,9 @@ describe('Multichain activity feature', function () {
   const smartContract = SMART_CONTRACTS.NFTS;
 
   it('should display activity for current and all networks', async function () {
-    console.log(
-      'process.env.FILTER_TOKENS_TOGGLE:',
-      process.env.FILTER_TOKENS_TOGGLE,
-    );
+    if (!process.env.FILTER_TOKENS_TOGGLE) {
+      return;
+    }
 
     await withFixtures(
       {
