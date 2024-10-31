@@ -9,8 +9,8 @@ import {
 import { PRIMARY } from '../helpers/constants/common';
 import { EtherDenomination } from '../../shared/constants/common';
 import { ETH_DEFAULT_DECIMALS } from '../constants';
-import { useMultichainSelector } from './useMultichainSelector';
 import { CHAIN_ID_TO_CURRENCY_SYMBOL_MAP } from '../../shared/constants/network';
+import { useMultichainSelector } from './useMultichainSelector';
 
 /**
  * Defines the shape of the options parameter for useUserPreferencedCurrency

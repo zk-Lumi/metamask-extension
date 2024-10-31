@@ -1,9 +1,7 @@
-import { DAPP_URL } from '../../constants';
 import FixtureBuilder from '../../fixture-builder';
 import {
   defaultGanacheOptions,
   openDapp,
-  regularDelayMs,
   unlockWallet,
   WINDOW_TITLES,
   withFixtures,

@@ -452,6 +452,7 @@ function TransactionListItemInner({
               ///: END:ONLY_INCLUDE_IF
             />
           )}
+          chainId={transactionGroup.initialTransaction.chainId}
         />
       )}
       {!supportsEIP1559 && showRetryEditGasPopover && (

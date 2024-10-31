@@ -198,17 +198,18 @@ export default function TransactionList({
     nonceSortedPendingTransactionsSelectorAllChains,
   );
 
-  const unfilteredPendingTransactions = useMemo(
-    () =>
-      allNetworksFilterShown
-        ? unfilteredPendingTransactionsCurrentChain
-        : unfilteredPendingTransactionsAllChains,
-    [
-      allNetworksFilterShown,
-      unfilteredPendingTransactionsAllChains,
-      unfilteredPendingTransactionsCurrentChain,
-    ],
-  );
+  const unfilteredPendingTransactions = useMemo(() => {
+    if (!process.env.FILTER_TOKENS_TOGGLE) {
+      return unfilteredPendingTransactionsCurrentChain;
+    }
+    return allNetworksFilterShown
+      ? unfilteredPendingTransactionsCurrentChain
+      : unfilteredPendingTransactionsAllChains;
+  }, [
+    allNetworksFilterShown,
+    unfilteredPendingTransactionsAllChains,
+    unfilteredPendingTransactionsCurrentChain,
+  ]);
 
   const unfilteredCompletedTransactionsCurrentChain = useSelector(
     nonceSortedCompletedTransactionsSelector,
@@ -218,17 +219,19 @@ export default function TransactionList({
     nonceSortedCompletedTransactionsSelectorAllChains,
   );
 
-  const unfilteredCompletedTransactions = useMemo(
-    () =>
-      allNetworksFilterShown
-        ? unfilteredCompletedTransactionsCurrentChain
-        : unfilteredCompletedTransactionsAllChains,
-    [
-      allNetworksFilterShown,
-      unfilteredCompletedTransactionsAllChains,
-      unfilteredCompletedTransactionsCurrentChain,
-    ],
-  );
+  const unfilteredCompletedTransactions = useMemo(() => {
+    if (!process.env.FILTER_TOKENS_TOGGLE) {
+      return unfilteredCompletedTransactionsCurrentChain;
+    }
+
+    return allNetworksFilterShown
+      ? unfilteredCompletedTransactionsCurrentChain
+      : unfilteredCompletedTransactionsAllChains;
+  }, [
+    allNetworksFilterShown,
+    unfilteredCompletedTransactionsAllChains,
+    unfilteredCompletedTransactionsCurrentChain,
+  ]);
 
   const chainId = useSelector(getCurrentChainId);
   const selectedAccount = useSelector(getSelectedAccount);
@@ -349,8 +352,10 @@ export default function TransactionList({
   const renderFilterButton = () => {
     return (
       <Box
-        display={Display.Flex}
-        padding={4}
+        className="asset-list-control-bar"
+        marginLeft={4}
+        marginRight={4}
+        paddingTop={4}
         justifyContent={
           isFullScreen ? JustifyContent.flexStart : JustifyContent.spaceBetween
         }

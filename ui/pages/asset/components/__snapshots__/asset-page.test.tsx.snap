@@ -288,24 +288,6 @@ exports[`AssetPage should render a native asset 1`] = `
               class="mm-box transaction-list__transactions"
             >
               <div
-                class="mm-box mm-box--padding-4 mm-box--display-flex mm-box--justify-content-flex-start"
-              >
-                <button
-                  class="mm-box mm-text mm-button-base mm-button-base--size-sm mm-button-base--ellipsis asset-list-control-bar__button mm-text--body-md-medium mm-text--ellipsis mm-box--margin-right-2 mm-box--padding-0 mm-box--padding-right-4 mm-box--padding-left-4 mm-box--display-inline-flex mm-box--justify-content-center mm-box--align-items-center mm-box--color-text-default mm-box--background-color-background-default mm-box--rounded-pill mm-box--border-style-solid mm-box--border-color-border-muted box--border-width-1"
-                  data-testid="sort-by-popover-toggle"
-                >
-                  <span
-                    class="mm-box mm-text mm-text--inherit mm-text--ellipsis mm-box--color-text-default"
-                  >
-                    All Networks
-                  </span>
-                  <span
-                    class="mm-box mm-icon mm-icon--size-sm mm-box--margin-inline-start-1 mm-box--display-inline-block mm-box--color-inherit"
-                    style="mask-image: url('./images/icons/arrow-down.svg');"
-                  />
-                </button>
-              </div>
-              <div
                 class="mm-box transaction-list__completed-transactions"
               >
                 <div
@@ -662,24 +644,6 @@ exports[`AssetPage should render an ERC20 asset without prices 1`] = `
             <div
               class="mm-box transaction-list__transactions"
             >
-              <div
-                class="mm-box mm-box--padding-4 mm-box--display-flex mm-box--justify-content-flex-start"
-              >
-                <button
-                  class="mm-box mm-text mm-button-base mm-button-base--size-sm mm-button-base--ellipsis asset-list-control-bar__button mm-text--body-md-medium mm-text--ellipsis mm-box--margin-right-2 mm-box--padding-0 mm-box--padding-right-4 mm-box--padding-left-4 mm-box--display-inline-flex mm-box--justify-content-center mm-box--align-items-center mm-box--color-text-default mm-box--background-color-background-default mm-box--rounded-pill mm-box--border-style-solid mm-box--border-color-border-muted box--border-width-1"
-                  data-testid="sort-by-popover-toggle"
-                >
-                  <span
-                    class="mm-box mm-text mm-text--inherit mm-text--ellipsis mm-box--color-text-default"
-                  >
-                    All Networks
-                  </span>
-                  <span
-                    class="mm-box mm-icon mm-icon--size-sm mm-box--margin-inline-start-1 mm-box--display-inline-block mm-box--color-inherit"
-                    style="mask-image: url('./images/icons/arrow-down.svg');"
-                  />
-                </button>
-              </div>
               <div
                 class="mm-box transaction-list__completed-transactions"
               >
@@ -1191,24 +1155,6 @@ exports[`AssetPage should render an ERC20 token with prices 1`] = `
             <div
               class="mm-box transaction-list__transactions"
             >
-              <div
-                class="mm-box mm-box--padding-4 mm-box--display-flex mm-box--justify-content-flex-start"
-              >
-                <button
-                  class="mm-box mm-text mm-button-base mm-button-base--size-sm mm-button-base--ellipsis asset-list-control-bar__button mm-text--body-md-medium mm-text--ellipsis mm-box--margin-right-2 mm-box--padding-0 mm-box--padding-right-4 mm-box--padding-left-4 mm-box--display-inline-flex mm-box--justify-content-center mm-box--align-items-center mm-box--color-text-default mm-box--background-color-background-default mm-box--rounded-pill mm-box--border-style-solid mm-box--border-color-border-muted box--border-width-1"
-                  data-testid="sort-by-popover-toggle"
-                >
-                  <span
-                    class="mm-box mm-text mm-text--inherit mm-text--ellipsis mm-box--color-text-default"
-                  >
-                    All Networks
-                  </span>
-                  <span
-                    class="mm-box mm-icon mm-icon--size-sm mm-box--margin-inline-start-1 mm-box--display-inline-block mm-box--color-inherit"
-                    style="mask-image: url('./images/icons/arrow-down.svg');"
-                  />
-                </button>
-              </div>
               <div
                 class="mm-box transaction-list__completed-transactions"
               >

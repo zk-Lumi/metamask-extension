@@ -14,6 +14,7 @@ import {
   getAccountName,
   getMetadataContractName,
   getInternalAccounts,
+  getNetworkConfigurationsByChainId,
   ///: BEGIN:ONLY_INCLUDE_IF(build-mmi)
   getKnownMethodData,
   getSelectedInternalAccount,
@@ -45,6 +46,7 @@ const mapStateToProps = (state, ownProps) => {
   };
   const rpcPrefs = getRpcPrefsForCurrentProvider(state);
 
+  const networkConfiguration = getNetworkConfigurationsByChainId(state);
   const isCustomNetwork = getIsCustomNetwork(state);
 
   ///: BEGIN:ONLY_INCLUDE_IF(build-mmi)
@@ -56,6 +58,7 @@ const mapStateToProps = (state, ownProps) => {
 
   return {
     rpcPrefs,
+    networkConfiguration,
     recipientEns,
     senderNickname: getNickName(senderAddress),
     recipientNickname: recipientAddress ? getNickName(recipientAddress) : null,
