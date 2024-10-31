@@ -352,10 +352,8 @@ export default function TransactionList({
   const renderFilterButton = () => {
     return (
       <Box
-        className="asset-list-control-bar"
         marginLeft={4}
         marginRight={4}
-        paddingTop={4}
         justifyContent={
           isFullScreen ? JustifyContent.flexStart : JustifyContent.spaceBetween
         }
@@ -363,7 +361,7 @@ export default function TransactionList({
       >
         <ButtonBase
           data-testid="sort-by-popover-toggle"
-          className="asset-list-control-bar__button"
+          className="activity-list-control-bar__button"
           onClick={toggleNetworkFilterPopover}
           size={ButtonBaseSize.Sm}
           endIconName={IconName.ArrowDown}
@@ -452,8 +450,8 @@ export default function TransactionList({
         ///: END:ONLY_INCLUDE_IF
       }
       <Box className="transaction-list" {...boxProps}>
+        {process.env.FILTER_TOKENS_TOGGLE && renderFilterButton()}
         <Box className="transaction-list__transactions">
-          {process.env.FILTER_TOKENS_TOGGLE && renderFilterButton()}
           {pendingTransactions.length > 0 && (
             <Box className="transaction-list__pending-transactions">
               {pendingTransactions.map((dateGroup) => {
