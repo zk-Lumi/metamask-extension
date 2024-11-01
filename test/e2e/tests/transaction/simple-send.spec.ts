@@ -23,6 +23,15 @@ describe('Simple send eth', function (this: Suite) {
         ganacheServer?: Ganache;
       }) => {
         await loginWithBalanceValidation(driver, ganacheServer);
+
+        const time = performance.now();
+        console.log('performance.now():', time);
+        console.log('RETRY_NUM:', process.env.RETRY_NUM);
+
+        if (process.env.RETRY_NUM === '0' || process.env.RETRY_NUM === 0) {
+          throw new Error('Time is less than 30 seconds');
+        }
+
         await sendTransaction(
           driver,
           '0x985c30949c92df7a0bd42e0f3e3d539ece98db24',

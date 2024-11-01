@@ -23,12 +23,7 @@ describe('Send ETH', function () {
         },
         async ({ driver, ganacheServer }) => {
           await logInWithBalanceValidation(driver, ganacheServer);
-
-          const time = performance.now();
-          if (time < 30000) {
-            throw new Error('Time is less than 30 seconds');
-          }
-
+\
           await openActionMenuAndStartSendFlow(driver);
 
           await driver.fill(

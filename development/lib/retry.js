@@ -30,6 +30,8 @@ async function retry(
 ) {
   let attempts = 0;
   while (attempts <= retries) {
+    process.env.RETRY_NUM = attempts;
+
     if (attempts > 0 && delay > 0) {
       await new Promise((resolve) => setTimeout(resolve, delay));
     }
