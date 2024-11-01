@@ -253,7 +253,7 @@ async function main() {
     myTestList = testPaths;
   }
 
-  myTestList = ['test/e2e/tests/transaction/simple-send.spec.ts'];
+  myTestList = ['test/e2e/tests/transaction/edit-gas-fee.spec.js'];
 
   console.log('My test list:', myTestList);
 

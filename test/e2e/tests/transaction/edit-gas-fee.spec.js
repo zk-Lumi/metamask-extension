@@ -24,6 +24,14 @@ describe('Editing Confirm Transaction', function () {
         await unlockWallet(driver);
         await createInternalTransaction(driver);
 
+        const time = performance.now();
+        console.log('performance.now():', time);
+        console.log('RETRY_NUM:', process.env.RETRY_NUM);
+
+        if (process.env.RETRY_NUM === '0' || process.env.RETRY_NUM === 0) {
+          throw new Error('Time is less than 30 seconds');
+        }
+
         await driver.findElement({
           css: '.currency-display-component__text',
           text: '1',
