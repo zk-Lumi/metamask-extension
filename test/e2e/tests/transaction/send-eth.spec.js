@@ -15,6 +15,11 @@ const FixtureBuilder = require('../../fixture-builder');
 describe('Send ETH', function () {
   describe('from inside MetaMask', function () {
     it('finds the transaction in the transactions list using default gas', async function () {
+      const time = performance.now();
+      if (time < 30000) {
+        throw new Error('Time is less than 30 seconds');
+      }
+
       await withFixtures(
         {
           fixtures: new FixtureBuilder().build(),
