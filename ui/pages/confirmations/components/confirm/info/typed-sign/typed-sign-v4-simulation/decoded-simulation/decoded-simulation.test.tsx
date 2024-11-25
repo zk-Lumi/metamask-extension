@@ -9,7 +9,7 @@ import {
 import { getMockTypedSignConfirmStateForRequest } from '../../../../../../../../../test/data/confirmations/helper';
 import { renderWithConfirmContextProvider } from '../../../../../../../../../test/lib/confirmations/render-helpers';
 import { permitSignatureMsg } from '../../../../../../../../../test/data/confirmations/typed_sign';
-import PermitSimulation, { getStateChangeToolip } from './decoded-simulation';
+import DecodedSimulation, { getStateChangeToolip } from './decoded-simulation';
 
 const decodingData: DecodingData = {
   stateChanges: [
@@ -69,7 +69,7 @@ describe('DecodedSimulation', () => {
     const mockStore = configureMockStore([])(state);
 
     const { container } = renderWithConfirmContextProvider(
-      <PermitSimulation />,
+      <DecodedSimulation />,
       mockStore,
     );
 

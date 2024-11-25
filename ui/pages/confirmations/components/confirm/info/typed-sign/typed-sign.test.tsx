@@ -99,7 +99,7 @@ describe('TypedSignInfo', () => {
     expect(container).toMatchSnapshot();
   });
 
-  it('display simulation details for permit signature if flag useTransactionSimulations is set', () => {
+  it('display simulation details for typesSignV4 signature if flag useTransactionSimulations is set', () => {
     const state = getMockTypedSignConfirmStateForRequest(permitSignatureMsg, {
       metamask: {
         useTransactionSimulations: true,

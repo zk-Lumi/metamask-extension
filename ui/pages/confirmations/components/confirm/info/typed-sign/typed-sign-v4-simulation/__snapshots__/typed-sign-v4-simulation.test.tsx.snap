@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`PermitSimulation should not render default simulation if decodingLoading is true 1`] = `
+exports[`TypedSignV4Simulation should not render default simulation if decodingLoading is true 1`] = `
 <div>
   <div
     class="mm-box mm-box--margin-bottom-4 mm-box--padding-2 mm-box--background-color-background-default mm-box--rounded-md"
@@ -86,7 +86,7 @@ exports[`PermitSimulation should not render default simulation if decodingLoadin
 </div>
 `;
 
-exports[`PermitSimulation should render default simulation if decoding api does not return result 1`] = `
+exports[`TypedSignV4Simulation should render default simulation if decoding api does not return result 1`] = `
 <div>
   <div
     class="mm-box mm-box--margin-bottom-4 mm-box--padding-2 mm-box--background-color-background-default mm-box--rounded-md"
@@ -215,7 +215,7 @@ exports[`PermitSimulation should render default simulation if decoding api does 
 </div>
 `;
 
-exports[`PermitSimulation should render default simulation if decoding api returns error 1`] = `
+exports[`TypedSignV4Simulation should render default simulation if decoding api returns error 1`] = `
 <div>
   <div
     class="mm-box mm-box--margin-bottom-4 mm-box--padding-2 mm-box--background-color-background-default mm-box--rounded-md"

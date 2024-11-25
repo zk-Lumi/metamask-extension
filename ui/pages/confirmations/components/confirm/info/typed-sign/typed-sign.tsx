@@ -2,6 +2,7 @@ import React from 'react';
 import { useSelector } from 'react-redux';
 import { isValidAddress } from 'ethereumjs-util';
 
+import { MESSAGE_TYPE } from '../../../../../../../shared/constants/app';
 import { ConfirmInfoAlertRow } from '../../../../../../components/app/confirm/info/row/alert-row/alert-row';
 import { parseTypedDataMessage } from '../../../../../../../shared/modules/transaction.utils';
 import { RowAlertKey } from '../../../../../../components/app/confirm/info/row/constants';
@@ -24,7 +25,7 @@ import { selectUseTransactionSimulations } from '../../../../selectors/preferenc
 import { ConfirmInfoRowTypedSignData } from '../../row/typed-sign-data/typedSignData';
 import { isSnapId } from '../../../../../../helpers/utils/snaps';
 import { SigningInWithRow } from '../shared/sign-in-with-row/sign-in-with-row';
-import { PermitSimulation } from './permit-simulation';
+import { TypedSignV4Simulation } from './typed-sign-v4-simulation';
 
 const TypedSignInfo: React.FC = () => {
   const t = useI18nContext();
@@ -43,6 +44,9 @@ const TypedSignInfo: React.FC = () => {
   } = parseTypedDataMessage(currentConfirmation.msgParams.data as string);
 
   const isPermit = isPermitSignatureRequest(currentConfirmation);
+  const isTypedDataV4Request =
+    currentConfirmation.msgParams?.signatureMethod ===
+    MESSAGE_TYPE.ETH_SIGN_TYPED_DATA_V4;
   const isOrder = isOrderSignatureRequest(currentConfirmation);
   const tokenContract = isPermit || isOrder ? verifyingContract : undefined;
   const { decimalsNumber } = useGetTokenStandardAndDetails(tokenContract);
@@ -56,7 +60,9 @@ const TypedSignInfo: React.FC = () => {
 
   return (
     <>
-      {isPermit && useTransactionSimulations && <PermitSimulation />}
+      {isTypedDataV4Request && useTransactionSimulations && (
+        <TypedSignV4Simulation />
+      )}
       <ConfirmInfoSection>
         {isPermit && (
           <>
