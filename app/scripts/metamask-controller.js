@@ -2607,6 +2607,7 @@ export default class MetamaskController extends EventEmitter {
       GasFeeController: this.gasFeeController.state,
       TokenListController: this.tokenListController.state,
       TokensController: this.tokensController.state,
+      TokenBalancesController: this.tokenBalancesController.state,
       SmartTransactionsController: this.smartTransactionsController.state,
       NftController: this.nftController.state,
       SelectedNetworkController: this.selectedNetworkController.state,
