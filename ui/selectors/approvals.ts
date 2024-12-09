@@ -47,27 +47,22 @@ export const getApprovalRequestsByType = (
 
   return pendingApprovalRequests;
 };
-
 export function getApprovalFlows(state: ApprovalsMetaMaskState) {
   return state.metamask.ApprovalController.approvalFlows;
 }
-
 export function getPendingApprovals(state: ApprovalsMetaMaskState) {
   return Object.values(
     state.metamask.ApprovalController.pendingApprovals ?? [],
   );
 }
-
 export function pendingApprovalsSortedSelector(state: ApprovalsMetaMaskState) {
   return getPendingApprovals(state).sort((a1, a2) => a1.time - a2.time);
 }
-
 const internalSelectPendingApproval = createSelector(
   getPendingApprovals,
   (_state: ApprovalsMetaMaskState, id: string) => id,
   (approvals, id) => approvals.find(({ id: approvalId }) => approvalId === id),
 );
-
 export const selectPendingApproval = createDeepEqualSelector(
   internalSelectPendingApproval,
   (approval) => approval,

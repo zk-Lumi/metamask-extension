@@ -6,96 +6,84 @@ import thunk from 'redux-thunk';
 import type { Store } from 'redux';
 import * as actions from '../../store/actions';
 import { useEnableMetametrics, useDisableMetametrics } from './useMetametrics';
-
 const middlewares = [thunk];
 const mockStore = configureStore(middlewares);
-
 jest.mock('../../store/actions', () => ({
-  performSignOut: jest.fn(),
-  performSignIn: jest.fn(),
-  setParticipateInMetaMetrics: jest.fn(),
-  showLoadingIndication: jest.fn(),
-  hideLoadingIndication: jest.fn(),
+    performSignOut: jest.fn(),
+    performSignIn: jest.fn(),
+    setParticipateInMetaMetrics: jest.fn(),
+    showLoadingIndication: jest.fn(),
+    hideLoadingIndication: jest.fn(),
 }));
-
 describe('useMetametrics', () => {
-  let store: Store;
-
-  beforeEach(() => {
-    store = mockStore({
-      metamask: {
-        participateInMetaMetrics: false,
-        isProfileSyncingEnabled: false,
-        isSignedIn: false,
-      },
+    let store: Store;
+    beforeEach(() => {
+        store = mockStore({
+            MetaMetricsController: {
+                participateInMetaMetrics: false
+            },
+            UserStorageController: {
+                isProfileSyncingEnabled: false
+            },
+            AuthenticationController: {
+                isSignedIn: false
+            }
+        });
+        store.dispatch = jest.fn().mockImplementation((action) => {
+            if (typeof action === 'function') {
+                return action(store.dispatch, store.getState);
+            }
+            return Promise.resolve();
+        });
+        jest.clearAllMocks();
     });
-
-    store.dispatch = jest.fn().mockImplementation((action) => {
-      if (typeof action === 'function') {
-        return action(store.dispatch, store.getState);
-      }
-      return Promise.resolve();
+    it('should enable MetaMetrics when user is not signed in and profile syncing enabled', async () => {
+        store.getState = () => ({
+            MetaMetricsController: {
+                participateInMetaMetrics: true
+            },
+            UserStorageController: {
+                isProfileSyncingEnabled: true
+            },
+            AuthenticationController: {
+                isSignedIn: false
+            }
+        });
+        const { result, waitForNextUpdate } = renderHook(() => useEnableMetametrics(), {
+            wrapper: ({ children }) => (<Provider>store) = { store } > { children } < /Provider>
+        });
     });
-
-    jest.clearAllMocks();
-  });
-
-  it('should enable MetaMetrics when user is not signed in and profile syncing enabled', async () => {
-    store.getState = () => ({
-      metamask: {
-        participateInMetaMetrics: true,
-        isProfileSyncingEnabled: true,
-        isSignedIn: false,
-      },
-    });
-
-    const { result, waitForNextUpdate } = renderHook(
-      () => useEnableMetametrics(),
-      {
-        wrapper: ({ children }) => (
-          <Provider store={store}>{children}</Provider>
-        ),
-      },
-    );
-
     act(() => {
-      result.current.enableMetametrics();
+        result.current.enableMetametrics();
     });
-
     await waitForNextUpdate();
-
     expect(actions.performSignIn).toHaveBeenCalled();
     expect(actions.setParticipateInMetaMetrics).toHaveBeenCalledWith(true);
     expect(store.dispatch).toHaveBeenCalled();
     expect(result.current.loading).toBe(false);
-  });
-
-  it('should disable MetaMetrics and sign out if profile syncing is enabled', async () => {
-    store.getState = () => ({
-      metamask: {
-        participateInMetaMetrics: true,
-        isProfileSyncingEnabled: true,
-        isSignedIn: true,
-      },
-    });
-
-    const { result, waitForNextUpdate } = renderHook(
-      () => useDisableMetametrics(),
-      {
-        wrapper: ({ children }) => (
-          <Provider store={store}>{children}</Provider>
-        ),
-      },
-    );
-
-    act(() => {
-      result.current.disableMetametrics();
-    });
-
-    await waitForNextUpdate();
-
-    expect(actions.performSignOut).toHaveBeenCalled();
-    expect(actions.setParticipateInMetaMetrics).toHaveBeenCalledWith(false);
-    expect(result.current.loading).toBe(false);
-  });
 });
+it('should disable MetaMetrics and sign out if profile syncing is enabled', async () => {
+    store.getState = () => ({
+        MetaMetricsController: {
+            participateInMetaMetrics: true
+        },
+        UserStorageController: {
+            isProfileSyncingEnabled: true
+        },
+        AuthenticationController: {
+            isSignedIn: true
+        }
+    });
+    const { result, waitForNextUpdate } = renderHook(() => useDisableMetametrics(), {
+        wrapper: ({ children }) => (<Provider>store) = { store } > { children } < /Provider>
+    });
+});
+act(() => {
+    result.current.disableMetametrics();
+});
+await waitForNextUpdate();
+expect(actions.performSignOut).toHaveBeenCalled();
+expect(actions.setParticipateInMetaMetrics).toHaveBeenCalledWith(false);
+expect(result.current.loading).toBe(false);
+;
+;

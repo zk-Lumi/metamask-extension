@@ -1,36 +1,28 @@
 import { AddressBookController } from '@metamask/address-book-controller';
 import { createDeepEqualSelector } from '../../../shared/modules/selectors/util';
 import { isEqualCaseInsensitive } from '../../../shared/modules/string-utils';
-
 /**
  * The Metamask state for the address book controller.
  */
 export type AddressBookMetaMaskState = {
-  metamask: {
-    addressBook: AddressBookController['state']['addressBook'];
-  };
+    metamask: {
+        addressBook: AddressBookController['state']['addressBook'];
+    };
 };
-
 /**
  * Get the full address book.
  *
  * @param state - The Metamask state for the address book controller.
  * @returns The full address book.
  */
-export const getFullAddressBook = (state: AddressBookMetaMaskState) =>
-  state.metamask.addressBook;
-
+export const getFullAddressBook = (state: AddressBookMetaMaskState) => state.metamask.addressBook;
 /**
  * Get the memoized full address book.
  *
  * @param state - The Metamask state for the address book controller.
  * @returns The full address book.
  */
-export const getMemoizedFullAddressBook = createDeepEqualSelector(
-  [getFullAddressBook],
-  (addressBook) => addressBook,
-);
-
+export const getMemoizedFullAddressBook = createDeepEqualSelector([getFullAddressBook], (addressBook) => addressBook);
 /**
  * Get the address book for a network.
  *
@@ -38,19 +30,15 @@ export const getMemoizedFullAddressBook = createDeepEqualSelector(
  * @param chainId - The chain ID to get the address book for.
  * @returns The address book for the network.
  */
-export const getAddressBookByNetwork = createDeepEqualSelector(
-  [
+export const getAddressBookByNetwork = createDeepEqualSelector([
     getMemoizedFullAddressBook,
     (_state: AddressBookMetaMaskState, chainId: `0x${string}`) => chainId,
-  ],
-  (addressBook, chainId) => {
+], (addressBook, chainId) => {
     if (!addressBook[chainId]) {
-      return [];
+        return [];
     }
     return Object.values(addressBook[chainId]);
-  },
-);
-
+});
 /* eslint-disable jsdoc/require-param */
 /* eslint-disable jsdoc/check-param-names */
 /**
@@ -63,18 +51,9 @@ export const getAddressBookByNetwork = createDeepEqualSelector(
  */
 /* eslint-enable jsdoc/require-param */
 /* eslint-enable jsdoc/check-param-names */
-export const getAddressBookEntryByNetwork = createDeepEqualSelector(
-  [
-    (
-      state: AddressBookMetaMaskState,
-      _address: string,
-      chainId: `0x${string}`,
-    ) => getAddressBookByNetwork(state, chainId),
+export const getAddressBookEntryByNetwork = createDeepEqualSelector([
+    (state: AddressBookMetaMaskState, _address: string, chainId: `0x${string}`) => getAddressBookByNetwork(state, chainId),
     (_state, address) => address,
-  ],
-  (addressBook, address) => {
-    return addressBook.find((contact) =>
-      isEqualCaseInsensitive(contact.address, address),
-    );
-  },
-);
+], (addressBook, address) => {
+    return addressBook.find((contact) => isEqualCaseInsensitive(contact.address, address));
+});

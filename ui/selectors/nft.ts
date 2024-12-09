@@ -27,7 +27,6 @@ export const getNftContractsByAddressByChain = createSelector(
   getNftContractsByChainByAccount,
   (nftContractsByChainByAccount) => {
     const userAccounts = Object.keys(nftContractsByChainByAccount);
-
     const allNftContracts = userAccounts
       .map((account) =>
         getKnownPropertyNames(nftContractsByChainByAccount[account]).map(
@@ -41,16 +40,20 @@ export const getNftContractsByAddressByChain = createSelector(
       .flat()
       .flat();
 
-    return allNftContracts.reduce((acc, contract) => {
-      const { chainId, ...data } = contract;
-
-      const chainIdContracts = acc[chainId] ?? {};
-      acc[chainId] = chainIdContracts;
-
-      chainIdContracts[data.address.toLowerCase()] = data;
-
-      return acc;
-    }, {} as { [chainId: string]: { [address: string]: NftContract } });
+    return allNftContracts.reduce(
+      (acc, contract) => {
+        const { chainId, ...data } = contract;
+        const chainIdContracts = acc[chainId] ?? {};
+        acc[chainId] = chainIdContracts;
+        chainIdContracts[data.address.toLowerCase()] = data;
+        return acc;
+      },
+      {} as {
+        [chainId: string]: {
+          [address: string]: NftContract;
+        };
+      },
+    );
   },
 );
 
