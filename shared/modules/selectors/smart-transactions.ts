@@ -24,7 +24,6 @@ export type SmartTransactionsMetaMaskState = {
     | 'SmartTransactionsController'
   >;
 };
-
 /**
  * Returns the user's explicit opt-in status for the smart transactions feature.
  * This should only be used for reading the user's internal opt-in status, and

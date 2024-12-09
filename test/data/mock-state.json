@@ -76,9 +76,13 @@
         }
       ]
     },
+    "TokenListController": {
+      "tokenList": {}
+    },
     "TokenBalancesController": {
       "tokenBalances": {}
     },
+    "OnboardingController": {},
     "PreferencesController": {
       "use4ByteResolution": true,
       "ipfsGateway": "dweb.link",
