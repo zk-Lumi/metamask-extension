@@ -15,13 +15,13 @@ import { useSnapInterfaceContext } from '../../../../contexts/snaps';
 
 export type SnapUIButtonProps = {
   name?: string;
+  loading?: boolean;
 };
 
 const COLORS = {
   primary: TextColor.infoDefault,
   destructive: TextColor.errorDefault,
   disabled: TextColor.textMuted,
-  loading: TextColor.primaryDefault,
 };
 
 export const SnapUIButton: FunctionComponent<
@@ -32,6 +32,7 @@ export const SnapUIButton: FunctionComponent<
   type = ButtonType.Button,
   variant = 'primary',
   disabled = false,
+  loading = false,
   className = '',
   ...props
 }) => {
@@ -66,7 +67,7 @@ export const SnapUIButton: FunctionComponent<
       disabled={disabled}
       {...props}
     >
-      {variant === 'loading' ? (
+      {loading ? (
         <Icon
           name={IconName.Loading}
           style={{ animation: 'spin 2s linear infinite' }}
