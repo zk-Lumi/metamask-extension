@@ -6,7 +6,7 @@ inputs:
     default: 'true'
   should-cache:
     required: false
-    default: 'true'
+    default: 'undefined'
 runs:
   using: composite
   steps:
@@ -43,7 +43,7 @@ runs:
       shell: bash
 
     - name: Cache workspace
-      if: ${{ inputs.should-cache == 'true'}}
+      if: ${{ inputs.should-cache == 'true' || (inputs.should-cache == 'undefined' && inputs.should-checkout == 'true') }}
       uses: actions/cache/save@v4
       with:
         path: ./

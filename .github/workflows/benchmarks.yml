@@ -16,7 +16,6 @@ jobs:
         uses: MetaMask/metamask-extension/.github/actions/setup-environment@self-hosted-temp
         with:
           should-checkout: false
-          should-cache: false
 
       # - name: Debugging with tmate
       #   uses: ./.github/actions/actions-tmate

@@ -30,7 +30,6 @@ jobs:
         uses: MetaMask/metamask-extension/.github/actions/setup-environment@self-hosted-temp
         with:
           should-checkout: true
-          should-cache: true
 
   run-tests:
     needs: prep-deps
