@@ -15,8 +15,8 @@ runs:
       uses: actions/checkout@v4
 
     # actions/cache/restore will not work in a container unless zstd is installed
-    - name: Pre-cache install zstd
-      # if: ${{ inputs.should-checkout == 'false' }}
+    - name: Install zstd
+      if: ${{ inputs.should-checkout == 'false' }}
       run: sudo apt-get update && sudo apt-get install zstd
       shell: bash
 

@@ -88,17 +88,23 @@ jobs:
       current-coverage: ${{ steps.get-current-coverage.outputs.CURRENT_COVERAGE }}
       stored-coverage: ${{ steps.get-stored-coverage.outputs.STORED_COVERAGE }}
     steps:
-      - name: Setup environment
-        uses: MetaMask/metamask-extension/.github/actions/setup-environment@self-hosted-temp
-        with:
-          should-checkout: false
-          should-cache: false
+      # - name: Setup environment
+      #   uses: MetaMask/metamask-extension/.github/actions/setup-environment@self-hosted-temp
+      #   with:
+      #     should-checkout: false
+      #     should-cache: false
 
-      - name: Download artifacts
-        uses: actions/download-artifact@v4
-        with:
-          path: coverage
-          merge-multiple: true
+      # - name: Download artifacts
+      #   uses: actions/download-artifact@v4
+      #   with:
+      #     path: coverage
+      #     merge-multiple: true
+
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup environment
+        uses: metamask/github-tools/.github/actions/setup-environment@main
 
       - name: Merge coverage reports
         run: yarn nyc merge coverage .nyc_output/coverage-final.json && yarn nyc report --reporter lcov
