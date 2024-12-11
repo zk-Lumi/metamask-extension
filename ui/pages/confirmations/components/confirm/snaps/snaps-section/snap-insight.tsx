@@ -76,6 +76,7 @@ export const SnapInsight: React.FunctionComponent<SnapInsightProps> = ({
         interfaceId={interfaceId}
         isLoading={loading}
         useDelineator={false}
+        disableCustomBackground={true}
       />
     </Delineator>
   );
