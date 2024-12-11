@@ -20,7 +20,7 @@ jobs:
         shell: bash
 
       - name: Check workflow files
-        run: ${{ steps.download-actionlint.outputs.executable }} -color
+        run: ${{ steps.download-actionlint.outputs.executable }} -color -ignore 'label ".+" is unknown'
         shell: bash
 
   prep-deps:

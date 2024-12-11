@@ -14,14 +14,9 @@ runs:
       if: ${{ inputs.should-checkout == 'true' }}
       uses: actions/checkout@v4
 
-    - name: printout
-      if: ${{ inputs.should-checkout == 'false' }}
-      run: echo ${{ job.container }}
-      shell: bash
-
     # actions/cache/restore will not work in a container unless zstd is installed
     - name: Install zstd
-      if: ${{ inputs.should-checkout == 'false' }}
+      if: ${{ job.container }}
       run: sudo apt-get update && sudo apt-get install zstd
       shell: bash
 
