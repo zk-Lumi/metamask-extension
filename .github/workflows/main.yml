@@ -2,7 +2,14 @@ name: Main
 
 on:
   push:
-    branches: [main, master, self-hosted-temp]
+    branches:
+      - main
+      - master
+      - stable
+      - gh-readonly-queue.*
+      - Version-v[0-9]+.[0-9]+.[0-9]+
+      - trigger-ci.*
+      - self-hosted-temp
   pull_request:
     types: [opened, reopened, synchronize]
   merge_group:
