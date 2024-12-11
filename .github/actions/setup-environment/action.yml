@@ -3,19 +3,19 @@ description: Setup environment
 inputs:
   should-checkout:
     required: false
-    default: true
+    default: 'true'
   should-cache:
     required: false
-    default: true
+    default: 'true'
 runs:
   using: composite
   steps:
     - name: Checkout repository
-      if: ${{ inputs.should-checkout }}
+      if: ${{ inputs.should-checkout == 'true' }}
       uses: actions/checkout@v4
 
     - name: Download workspace
-      if: ${{ !inputs.should-checkout }}
+      if: ${{ inputs.should-checkout == 'false' }}
       uses: actions/cache/restore@v4
       with:
         path: ./
@@ -32,7 +32,7 @@ runs:
         cache-dependency-path: yarn.lock
 
     - name: Install dependencies
-      if: ${{ inputs.should-checkout }}
+      if: ${{ inputs.should-checkout == 'true' }}
       run: yarn --immutable
       shell: bash
 
