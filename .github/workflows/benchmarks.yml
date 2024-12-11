@@ -1,29 +1,21 @@
-name: 'Benchmarks'
+name: 'Run Benchmarks'
 
-on:
-  push:
-    branches: self-hosted-temp-nope
-  repository_dispatch:
-    types: [start-example-workflow]
-  workflow_dispatch:
-    inputs:
-      name:
-        description: 'name'
-      home:
-        description: 'home'
+on: workflow_call
+
 jobs:
-  test:
+  benchmark:
     name: Benchmark
-    # runs-on: ubuntu-latest
-    # container: cimg/node:20.18-browsers
-    runs-on: [self-hosted, Linux, X64]
+    runs-on: ubuntu-latest
+    # runs-on: [self-hosted, Linux, X64]
     container:
       image: cimg/node:20.18-browsers
-      # image: selenium/standalone-chrome:126.0
       options: --user root
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
+      - name: Setup environment
+        uses: MetaMask/metamask-extension/.github/actions/setup-environment@self-hosted-temp
+        with:
+          should-checkout: false
+          should-cache: false
 
       # - name: Debugging with tmate
       #   uses: ./.github/actions/actions-tmate
@@ -36,19 +28,19 @@ jobs:
       #     apt-get update
       #     apt-get install gh
 
-      - run: corepack enable
-        shell: bash
+      # - run: corepack enable
+      #   shell: bash
 
-      - name: Set up Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version-file: .nvmrc
-          cache: yarn
-          cache-dependency-path: yarn.lock
+      # - name: Set up Node.js
+      #   uses: actions/setup-node@v4
+      #   with:
+      #     node-version-file: .nvmrc
+      #     cache: yarn
+      #     cache-dependency-path: yarn.lock
 
-      - name: Install dependencies
-        run: yarn
-        shell: bash
+      # - name: Install dependencies
+      #   run: yarn
+      #   shell: bash
 
       # - run: yarn build:test
       - run: yarn webpack --test
@@ -71,3 +63,5 @@ jobs:
           name: pageload
           path: test-artifacts/chrome/benchmark/pageload.json
           retention-days: 5
+# user-actions-benchmark:
+#   name: User Actions Benchmark

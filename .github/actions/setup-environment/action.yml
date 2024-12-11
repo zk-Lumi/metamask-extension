@@ -37,7 +37,7 @@ runs:
       shell: bash
 
     - name: Cache workspace
-      if: ${{ inputs.should-cache }}
+      if: ${{ inputs.should-cache == 'true'}}
       uses: actions/cache/save@v4
       with:
         path: ./

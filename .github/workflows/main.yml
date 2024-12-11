@@ -33,9 +33,12 @@ jobs:
           should-cache: true
 
   run-tests:
-    name: Run tests
     needs: prep-deps
     uses: ./.github/workflows/run-tests.yml
+
+  run-benchmarks:
+    needs: prep-deps
+    uses: ./.github/workflows/benchmarks.yml
 
   wait-for-circleci-workflow-status:
     name: Wait for CircleCI workflow status
