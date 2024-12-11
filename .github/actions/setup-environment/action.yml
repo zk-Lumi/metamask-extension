@@ -14,6 +14,12 @@ runs:
       if: ${{ inputs.should-checkout == 'true' }}
       uses: actions/checkout@v4
 
+    # actions/cache/restore will not work in a container unless zstd is installed
+    - name: Pre-cache install zstd
+      # if: ${{ inputs.should-checkout == 'false' }}
+      run: sudo apt-get update && sudo apt-get install zstd
+      shell: bash
+
     - name: Download workspace
       if: ${{ inputs.should-checkout == 'false' }}
       uses: actions/cache/restore@v4
