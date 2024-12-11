@@ -50,6 +50,7 @@ jobs:
     needs:
       - check-workflows
       - run-tests
+      - run-benchmarks
       - wait-for-circleci-workflow-status
     outputs:
       PASSED: ${{ steps.set-output.outputs.PASSED }}

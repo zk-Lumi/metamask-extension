@@ -9,7 +9,7 @@ jobs:
     # runs-on: [self-hosted, Linux, X64]
     container:
       image: cimg/node:20.18-browsers
-      options: --user root
+      # options: --user root
     steps:
       - name: Setup environment
         uses: MetaMask/metamask-extension/.github/actions/setup-environment@self-hosted-temp
