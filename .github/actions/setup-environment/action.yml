@@ -11,7 +11,7 @@ runs:
   using: composite
   steps:
     - name: Checkout repository
-      if: ${{ inputs.should-checkout == 'true' }}
+      # if: ${{ inputs.should-checkout == 'true' }}
       uses: actions/checkout@v4
 
     # actions/cache/restore will not work in a container unless zstd is installed
@@ -24,7 +24,7 @@ runs:
       if: ${{ inputs.should-checkout == 'false' }}
       uses: actions/cache/restore@v4
       with:
-        path: ./
+        path: ./node_modules
         key: workspace-${{ github.sha }}
 
     - run: corepack enable
@@ -46,5 +46,5 @@ runs:
       if: ${{ inputs.should-cache == 'true' || (inputs.should-cache == 'undefined' && inputs.should-checkout == 'true') }}
       uses: actions/cache/save@v4
       with:
-        path: ./
+        path: ./node_modules
         key: workspace-${{ github.sha }}
