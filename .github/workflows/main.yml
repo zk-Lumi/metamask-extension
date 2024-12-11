@@ -2,14 +2,9 @@ name: Main
 
 on:
   push:
-    branches:
-      - main
-      - master
+    branches: [main, master, self-hosted-temp]
   pull_request:
-    types:
-      - opened
-      - reopened
-      - synchronize
+    types: [opened, reopened, synchronize]
   merge_group:
 
 jobs:
@@ -28,8 +23,18 @@ jobs:
         run: ${{ steps.download-actionlint.outputs.executable }} -color
         shell: bash
 
+  prep-deps:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Setup environment
+        uses: MetaMask/metamask-extension/.github/actions/setup-environment@self-hosted-temp
+        with:
+          should-checkout: true
+          should-cache: true
+
   run-tests:
     name: Run tests
+    needs: prep-deps
     uses: ./.github/workflows/run-tests.yml
 
   wait-for-circleci-workflow-status:

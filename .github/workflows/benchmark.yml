@@ -2,7 +2,7 @@ name: 'Benchmarks'
 
 on:
   push:
-    branches: self-hosted-temp
+    branches: self-hosted-temp-nope
   repository_dispatch:
     types: [start-example-workflow]
   workflow_dispatch:

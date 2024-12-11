@@ -1,0 +1,44 @@
+name: Setup environment
+description: Setup environment
+inputs:
+  should-checkout:
+    required: false
+    default: true
+  should-cache:
+    required: false
+    default: true
+runs:
+  using: composite
+  steps:
+    - name: Checkout repository
+      if: ${{ inputs.should-checkout }}
+      uses: actions/checkout@v4
+
+    - name: Download workspace
+      if: ${{ !inputs.should-checkout }}
+      uses: actions/cache/restore@v4
+      with:
+        path: ./
+        key: workspace-${{ github.sha }}
+
+    - run: corepack enable
+      shell: bash
+
+    - name: Set up Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version-file: .nvmrc
+        cache: yarn
+        cache-dependency-path: yarn.lock
+
+    - name: Install dependencies
+      if: ${{ inputs.should-checkout }}
+      run: yarn --immutable
+      shell: bash
+
+    - name: Cache workspace
+      if: ${{ inputs.should-cache }}
+      uses: actions/cache/save@v4
+      with:
+        path: ./
+        key: workspace-${{ github.sha }}
