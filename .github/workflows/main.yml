@@ -44,6 +44,8 @@ jobs:
     name: Wait for CircleCI workflow status
     uses: ./.github/workflows/wait-for-circleci-workflow-status.yml
 
+  # Explanation for all-jobs-completed and all-jobs-pass being separate:
+  # https://github.com/MetaMask/metamask-module-template/pull/151
   all-jobs-completed:
     name: All jobs completed
     runs-on: ubuntu-latest
