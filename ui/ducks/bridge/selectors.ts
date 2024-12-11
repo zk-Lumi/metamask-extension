@@ -20,13 +20,16 @@ import {
   BRIDGE_PREFERRED_GAS_ESTIMATE,
   BRIDGE_QUOTE_MAX_ETA_SECONDS,
   BRIDGE_QUOTE_MAX_RETURN_DIFFERENCE_PERCENTAGE,
+  RequestStatus,
 } from '../../../shared/constants/bridge';
 import {
-  BridgeControllerState,
+  BridgeState,
   BridgeFeatureFlagsKey,
-  // TODO: Remove restricted import
-  // eslint-disable-next-line import/no-restricted-paths
-} from '../../../app/scripts/controllers/bridge/types';
+  L1GasFees,
+  QuoteMetadata,
+  QuoteResponse,
+  SortOrder,
+} from '../../../shared/types/bridge';
 import { createDeepEqualSelector } from '../../../shared/modules/selectors/util';
 import {
   getProviderConfig,
@@ -34,15 +37,6 @@ import {
 } from '../../../shared/modules/selectors/networks';
 import { SwapsTokenObject } from '../../../shared/constants/swaps';
 import { getConversionRate, getGasFeeEstimates } from '../metamask/metamask';
-// TODO: Remove restricted import
-// eslint-disable-next-line import/no-restricted-paths
-import { RequestStatus } from '../../../app/scripts/controllers/bridge/constants';
-import {
-  L1GasFees,
-  QuoteMetadata,
-  QuoteResponse,
-  SortOrder,
-} from '../../pages/bridge/types';
 import {
   calcAdjustedReturn,
   calcCost,
@@ -55,15 +49,15 @@ import {
 } from '../../pages/bridge/utils/quote';
 import { decGWEIToHexWEI } from '../../../shared/modules/conversion.utils';
 import { calcTokenAmount } from '../../../shared/lib/transactions-controller-utils';
+import { BridgeSlice } from './bridge';
 import {
-  exchangeRatesFromNativeAndCurrencyRates,
   exchangeRateFromMarketData,
+  exchangeRatesFromNativeAndCurrencyRates,
   tokenPriceInNativeAsset,
 } from './utils';
-import { BridgeState } from './bridge';
 
 type BridgeAppState = {
-  metamask: { bridgeState: BridgeControllerState } & NetworkState & {
+  metamask: { bridgeState: BridgeState } & NetworkState & {
       useExternalServices: boolean;
       currencyRates: {
         [currency: string]: {
@@ -72,7 +66,7 @@ type BridgeAppState = {
         };
       };
     };
-  bridge: BridgeState;
+  bridge: BridgeSlice;
 };
 
 // only includes networks user has added

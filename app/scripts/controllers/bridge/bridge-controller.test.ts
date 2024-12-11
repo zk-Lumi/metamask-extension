@@ -12,16 +12,14 @@ import * as balanceUtils from '../../../../shared/modules/bridge-utils/balance';
 import mockBridgeQuotesErc20Native from '../../../../test/data/bridge/mock-quotes-erc20-native.json';
 import mockBridgeQuotesNativeErc20 from '../../../../test/data/bridge/mock-quotes-native-erc20.json';
 import mockBridgeQuotesNativeErc20Eth from '../../../../test/data/bridge/mock-quotes-native-erc20-eth.json';
-// TODO: Remove restricted import
-// eslint-disable-next-line import/no-restricted-paths
-import { QuoteResponse } from '../../../../ui/pages/bridge/types';
+import { QuoteResponse } from '../../../../shared/types/bridge';
 import { decimalToHex } from '../../../../shared/modules/conversion.utils';
 import BridgeController from './bridge-controller';
 import { BridgeControllerMessenger } from './types';
-import { DEFAULT_BRIDGE_CONTROLLER_STATE } from './constants';
+import { DEFAULT_BRIDGE_STATE } from './constants';
 
 const EMPTY_INIT_STATE = {
-  bridgeState: DEFAULT_BRIDGE_CONTROLLER_STATE,
+  bridgeState: DEFAULT_BRIDGE_STATE,
 };
 
 const messengerMock = {
@@ -160,10 +158,9 @@ describe('BridgeController', function () {
     expect(bridgeController.state.bridgeState).toStrictEqual(
       expect.objectContaining({
         bridgeFeatureFlags: expectedFeatureFlagsResponse,
-        quotes: DEFAULT_BRIDGE_CONTROLLER_STATE.quotes,
-        quotesLastFetched: DEFAULT_BRIDGE_CONTROLLER_STATE.quotesLastFetched,
-        quotesLoadingStatus:
-          DEFAULT_BRIDGE_CONTROLLER_STATE.quotesLoadingStatus,
+        quotes: DEFAULT_BRIDGE_STATE.quotes,
+        quotesLastFetched: DEFAULT_BRIDGE_STATE.quotesLastFetched,
+        quotesLoadingStatus: DEFAULT_BRIDGE_STATE.quotesLoadingStatus,
       }),
     );
   });
@@ -358,10 +355,9 @@ describe('BridgeController', function () {
     expect(bridgeController.state.bridgeState).toStrictEqual(
       expect.objectContaining({
         quoteRequest: { ...quoteRequest, walletAddress: undefined },
-        quotes: DEFAULT_BRIDGE_CONTROLLER_STATE.quotes,
-        quotesLastFetched: DEFAULT_BRIDGE_CONTROLLER_STATE.quotesLastFetched,
-        quotesLoadingStatus:
-          DEFAULT_BRIDGE_CONTROLLER_STATE.quotesLoadingStatus,
+        quotes: DEFAULT_BRIDGE_STATE.quotes,
+        quotesLastFetched: DEFAULT_BRIDGE_STATE.quotesLastFetched,
+        quotesLoadingStatus: DEFAULT_BRIDGE_STATE.quotesLoadingStatus,
       }),
     );
 
@@ -508,11 +504,10 @@ describe('BridgeController', function () {
     expect(bridgeController.state.bridgeState).toStrictEqual(
       expect.objectContaining({
         quoteRequest: { ...quoteRequest, walletAddress: undefined },
-        quotes: DEFAULT_BRIDGE_CONTROLLER_STATE.quotes,
-        quotesLastFetched: DEFAULT_BRIDGE_CONTROLLER_STATE.quotesLastFetched,
+        quotes: DEFAULT_BRIDGE_STATE.quotes,
+        quotesLastFetched: DEFAULT_BRIDGE_STATE.quotesLastFetched,
         quotesInitialLoadTime: undefined,
-        quotesLoadingStatus:
-          DEFAULT_BRIDGE_CONTROLLER_STATE.quotesLoadingStatus,
+        quotesLoadingStatus: DEFAULT_BRIDGE_STATE.quotesLoadingStatus,
       }),
     );
 
@@ -602,10 +597,9 @@ describe('BridgeController', function () {
           destChainId: 10,
           destTokenAddress: '0x123',
         },
-        quotes: DEFAULT_BRIDGE_CONTROLLER_STATE.quotes,
-        quotesLastFetched: DEFAULT_BRIDGE_CONTROLLER_STATE.quotesLastFetched,
-        quotesLoadingStatus:
-          DEFAULT_BRIDGE_CONTROLLER_STATE.quotesLoadingStatus,
+        quotes: DEFAULT_BRIDGE_STATE.quotes,
+        quotesLastFetched: DEFAULT_BRIDGE_STATE.quotesLastFetched,
+        quotesLoadingStatus: DEFAULT_BRIDGE_STATE.quotesLoadingStatus,
       }),
     );
   });
@@ -703,10 +697,9 @@ describe('BridgeController', function () {
       expect(bridgeController.state.bridgeState).toStrictEqual(
         expect.objectContaining({
           quoteRequest: { ...quoteRequest, walletAddress: undefined },
-          quotes: DEFAULT_BRIDGE_CONTROLLER_STATE.quotes,
-          quotesLastFetched: DEFAULT_BRIDGE_CONTROLLER_STATE.quotesLastFetched,
-          quotesLoadingStatus:
-            DEFAULT_BRIDGE_CONTROLLER_STATE.quotesLoadingStatus,
+          quotes: DEFAULT_BRIDGE_STATE.quotes,
+          quotesLastFetched: DEFAULT_BRIDGE_STATE.quotesLastFetched,
+          quotesLoadingStatus: DEFAULT_BRIDGE_STATE.quotesLoadingStatus,
         }),
       );
 
