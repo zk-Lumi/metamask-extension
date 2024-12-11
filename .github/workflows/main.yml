@@ -36,7 +36,8 @@ jobs:
       - name: Setup environment
         uses: MetaMask/metamask-extension/.github/actions/setup-environment@self-hosted-temp
         with:
-          should-checkout: true
+          should-cache-restore: false
+          should-cache-save: true
 
   run-tests:
     needs: prep-deps

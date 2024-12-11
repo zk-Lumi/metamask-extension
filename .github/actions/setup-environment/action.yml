@@ -1,17 +1,15 @@
 name: Setup environment
 description: Setup environment
 inputs:
-  should-checkout:
+  should-cache-restore:
+    required: true
+  should-cache-save:
     required: false
-    default: 'true'
-  should-cache:
-    required: false
-    default: 'undefined'
+    default: 'false'
 runs:
   using: composite
   steps:
     - name: Checkout repository
-      # if: ${{ inputs.should-checkout == 'true' }}
       uses: actions/checkout@v4
 
     # actions/cache/restore will not work in a container unless zstd is installed
@@ -21,7 +19,7 @@ runs:
       shell: bash
 
     - name: Download workspace
-      if: ${{ inputs.should-checkout == 'false' }}
+      if: ${{ inputs.should-cache-restore == 'true' }}
       uses: actions/cache/restore@v4
       with:
         path: ./node_modules
@@ -38,12 +36,12 @@ runs:
         cache-dependency-path: yarn.lock
 
     - name: Install dependencies
-      if: ${{ inputs.should-checkout == 'true' }}
+      if: ${{ inputs.should-cache-restore == 'false' }}
       run: yarn --immutable
       shell: bash
 
     - name: Cache workspace
-      if: ${{ inputs.should-cache == 'true' || (inputs.should-cache == 'undefined' && inputs.should-checkout == 'true') }}
+      if: ${{ inputs.should-cache-save == 'true' }}
       uses: actions/cache/save@v4
       with:
         path: ./node_modules
