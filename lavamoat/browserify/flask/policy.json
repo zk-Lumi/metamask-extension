@@ -1113,8 +1113,7 @@
       "packages": {
         "@metamask/eth-query>json-rpc-random-id": true,
         "@metamask/eth-token-tracker>@metamask/eth-block-tracker>@metamask/utils": true,
-        "@metamask/safe-event-emitter": true,
-        "pify": true
+        "@metamask/safe-event-emitter": true
       }
     },
     "@metamask/eth-token-tracker>@metamask/eth-block-tracker>@metamask/utils": {
@@ -1690,8 +1689,8 @@
         "@metamask/eth-json-rpc-middleware": true,
         "@metamask/eth-json-rpc-provider": true,
         "@metamask/eth-query": true,
+        "@metamask/eth-token-tracker>@metamask/eth-block-tracker": true,
         "@metamask/json-rpc-engine": true,
-        "@metamask/network-controller>@metamask/eth-block-tracker": true,
         "@metamask/network-controller>@metamask/eth-json-rpc-infura": true,
         "@metamask/network-controller>@metamask/swappable-obj-proxy": true,
         "@metamask/rpc-errors": true,
@@ -1700,33 +1699,6 @@
         "reselect": true,
         "uri-js": true,
         "uuid": true
-      }
-    },
-    "@metamask/network-controller>@metamask/eth-block-tracker": {
-      "globals": {
-        "clearTimeout": true,
-        "console.error": true,
-        "setTimeout": true
-      },
-      "packages": {
-        "@metamask/eth-query>json-rpc-random-id": true,
-        "@metamask/network-controller>@metamask/eth-block-tracker>@metamask/utils": true,
-        "@metamask/safe-event-emitter": true
-      }
-    },
-    "@metamask/network-controller>@metamask/eth-block-tracker>@metamask/utils": {
-      "globals": {
-        "TextDecoder": true,
-        "TextEncoder": true
-      },
-      "packages": {
-        "@metamask/utils>@metamask/superstruct": true,
-        "@metamask/utils>@scure/base": true,
-        "@metamask/utils>pony-cause": true,
-        "@noble/hashes": true,
-        "browserify>buffer": true,
-        "nock>debug": true,
-        "semver": true
       }
     },
     "@metamask/network-controller>@metamask/eth-json-rpc-infura": {
@@ -2156,6 +2128,64 @@
     "@metamask/profile-sync-controller>siwe>@stablelib/random>@stablelib/binary": {
       "packages": {
         "@metamask/profile-sync-controller>siwe>@stablelib/random>@stablelib/binary>@stablelib/int": true
+      }
+    },
+    "@metamask/providers": {
+      "globals": {
+        "CustomEvent": true,
+        "Event": true,
+        "addEventListener": true,
+        "chrome.runtime.connect": true,
+        "console": true,
+        "dispatchEvent": true,
+        "document.createElement": true,
+        "document.readyState": true,
+        "ethereum": "write",
+        "location.hostname": true,
+        "removeEventListener": true,
+        "web3": true
+      },
+      "packages": {
+        "@metamask/json-rpc-engine": true,
+        "@metamask/json-rpc-middleware-stream": true,
+        "@metamask/object-multiplex": true,
+        "@metamask/providers>detect-browser": true,
+        "@metamask/providers>extension-port-stream": true,
+        "@metamask/providers>is-stream": true,
+        "@metamask/rpc-errors": true,
+        "@metamask/safe-event-emitter": true,
+        "@metamask/utils": true,
+        "eslint>fast-deep-equal": true,
+        "readable-stream": true
+      }
+    },
+    "@metamask/providers>detect-browser": {
+      "globals": {
+        "document": true,
+        "navigator": true
+      },
+      "packages": {
+        "process": true
+      }
+    },
+    "@metamask/providers>extension-port-stream": {
+      "packages": {
+        "@metamask/providers>extension-port-stream>readable-stream": true,
+        "browserify>buffer": true
+      }
+    },
+    "@metamask/providers>extension-port-stream>readable-stream": {
+      "globals": {
+        "AbortController": true,
+        "AggregateError": true,
+        "Blob": true
+      },
+      "packages": {
+        "browserify>buffer": true,
+        "browserify>string_decoder": true,
+        "extension-port-stream>readable-stream>abort-controller": true,
+        "process": true,
+        "webpack>events": true
       }
     },
     "@metamask/queued-request-controller": {
@@ -5350,21 +5380,6 @@
     "web3": {
       "globals": {
         "XMLHttpRequest": true
-      }
-    },
-    "web3-stream-provider": {
-      "globals": {
-        "setTimeout": true
-      },
-      "packages": {
-        "browserify>util": true,
-        "readable-stream": true,
-        "web3-stream-provider>uuid": true
-      }
-    },
-    "web3-stream-provider>uuid": {
-      "globals": {
-        "crypto": true
       }
     },
     "webextension-polyfill": {
