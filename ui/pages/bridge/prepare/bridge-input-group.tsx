@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef } from 'react';
 import { useSelector } from 'react-redux';
 import { BigNumber } from 'bignumber.js';
 import { getAddress } from 'ethers/lib/utils';
@@ -7,7 +7,6 @@ import {
   TextField,
   TextFieldType,
   ButtonLink,
-  PopoverPosition,
   Button,
   ButtonSize,
 } from '../../../components/component-library';
@@ -16,7 +15,7 @@ import { TabName } from '../../../components/multichain/asset-picker-amount/asse
 import { useI18nContext } from '../../../hooks/useI18nContext';
 import { getCurrentCurrency, getLocale } from '../../../selectors';
 import { formatCurrencyAmount, formatTokenAmount } from '../utils/quote';
-import { Column, Row, Tooltip } from '../layout';
+import { Column, Row } from '../layout';
 import {
   Display,
   FontWeight,
@@ -26,7 +25,6 @@ import {
   TextColor,
 } from '../../../helpers/constants/design-system';
 import { AssetType } from '../../../../shared/constants/transaction';
-import { BRIDGE_QUOTE_MAX_RETURN_DIFFERENCE_PERCENTAGE } from '../../../../shared/constants/bridge';
 import useLatestBalance from '../../../hooks/bridge/useLatestBalance';
 import {
   getBridgeQuotes,
@@ -85,8 +83,6 @@ export const BridgeInputGroup = ({
   ];
 
   const inputRef = useRef<HTMLInputElement | null>(null);
-
-  const [isLowReturnTooltipOpen, setIsLowReturnTooltipOpen] = useState(true);
 
   useEffect(() => {
     if (inputRef.current) {
@@ -188,23 +184,6 @@ export const BridgeInputGroup = ({
 
       <Row justifyContent={JustifyContent.spaceBetween}>
         <Row>
-          {isAmountReadOnly &&
-            isEstimatedReturnLow &&
-            isLowReturnTooltipOpen && (
-              <Tooltip
-                title={t('lowEstimatedReturnTooltipTitle')}
-                position={PopoverPosition.TopStart}
-                isOpen={isLowReturnTooltipOpen}
-                onClose={() => setIsLowReturnTooltipOpen(false)}
-                triggerElement={<span />}
-                flip={false}
-                offset={[0, 80]}
-              >
-                {t('lowEstimatedReturnTooltipMessage', [
-                  BRIDGE_QUOTE_MAX_RETURN_DIFFERENCE_PERCENTAGE * 100,
-                ])}
-              </Tooltip>
-            )}
           <Text
             variant={TextVariant.bodyMd}
             fontWeight={FontWeight.Normal}

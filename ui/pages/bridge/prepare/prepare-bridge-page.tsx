@@ -86,6 +86,7 @@ import { useBridgeTokens } from '../../../hooks/bridge/useBridgeTokens';
 import { getCurrentKeyring, getLocale } from '../../../selectors';
 import { isHardwareKeyring } from '../../../helpers/utils/hardware';
 import { SECOND } from '../../../../shared/constants/time';
+import { BRIDGE_QUOTE_MAX_RETURN_DIFFERENCE_PERCENTAGE } from '../../../../shared/constants/bridge';
 import { BridgeInputGroup } from './bridge-input-group';
 import { BridgeCTAButton } from './bridge-cta-button';
 
@@ -132,10 +133,12 @@ const PrepareBridgePage = () => {
 
   const ticker = useSelector(getNativeCurrency);
   const {
+    isEstimatedReturnLow,
     isNoQuotesAvailable,
     isInsufficientGasForQuote,
     isInsufficientBalance,
   } = useSelector(getValidationErrors);
+  const { quotesRefreshCount } = useSelector(getBridgeQuotes);
   const { openBuyCryptoInPdapp } = useRamps();
 
   const { balanceAmount: nativeAssetBalance } = useLatestBalance(
@@ -171,6 +174,10 @@ const PrepareBridgePage = () => {
 
   const [rotateSwitchTokens, setRotateSwitchTokens] = useState(false);
 
+  // Resets the banner visibility when the estimated return is low
+  const [isLowReturnBannerOpen, setIsLowReturnBannerOpen] = useState(true);
+  useEffect(() => setIsLowReturnBannerOpen(true), [quotesRefreshCount]);
+
   // Background updates are debounced when the switch button is clicked
   // To prevent putting the frontend in an unexpected state, prevent the user
   // from switching tokens within the debounce period
@@ -192,16 +199,27 @@ const PrepareBridgePage = () => {
     dispatch(resetBridgeState());
   }, []);
 
-  const scrollRef = useRef<HTMLDivElement>(null);
-
+  // Scroll to bottom of the page when banners are shown
+  const insufficientBalanceBannerRef = useRef<HTMLDivElement>(null);
+  const isEstimatedReturnLowRef = useRef<HTMLDivElement>(null);
   useEffect(() => {
     if (isInsufficientGasForQuote(nativeAssetBalance)) {
-      scrollRef.current?.scrollIntoView({
+      insufficientBalanceBannerRef.current?.scrollIntoView({
         behavior: 'smooth',
         block: 'start',
       });
     }
-  }, [isInsufficientGasForQuote(nativeAssetBalance)]);
+    if (isEstimatedReturnLow) {
+      isEstimatedReturnLowRef.current?.scrollIntoView({
+        behavior: 'smooth',
+        block: 'start',
+      });
+    }
+  }, [
+    isEstimatedReturnLow,
+    isInsufficientGasForQuote(nativeAssetBalance),
+    isLowReturnBannerOpen,
+  ]);
 
   const quoteParams = useMemo(
     () => ({
@@ -582,12 +600,26 @@ const PrepareBridgePage = () => {
             textAlign={TextAlign.Left}
           />
         )}
+        {isEstimatedReturnLow && isLowReturnBannerOpen && (
+          <BannerAlert
+            ref={insufficientBalanceBannerRef}
+            marginInline={4}
+            marginBottom={3}
+            title={t('lowEstimatedReturnTooltipTitle')}
+            severity={BannerAlertSeverity.Warning}
+            description={t('lowEstimatedReturnTooltipMessage', [
+              BRIDGE_QUOTE_MAX_RETURN_DIFFERENCE_PERCENTAGE * 100,
+            ])}
+            textAlign={TextAlign.Left}
+            onClose={() => setIsLowReturnBannerOpen(false)}
+          />
+        )}
         {!isLoading &&
           activeQuote &&
           !isInsufficientBalance(srcTokenBalance) &&
           isInsufficientGasForQuote(nativeAssetBalance) && (
             <BannerAlert
-              ref={scrollRef}
+              ref={isEstimatedReturnLowRef}
               marginInline={4}
               marginBottom={3}
               title={t('bridgeValidationInsufficientGasTitle', [ticker])}

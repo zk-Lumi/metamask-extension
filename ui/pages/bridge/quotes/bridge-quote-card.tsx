@@ -14,6 +14,7 @@ import {
   getBridgeQuotes,
   getFromChain,
   getToChain,
+  getValidationErrors,
 } from '../../../ducks/bridge/selectors';
 import { useI18nContext } from '../../../hooks/useI18nContext';
 import {
@@ -32,6 +33,7 @@ import {
   AlignItems,
   BackgroundColor,
   BlockSize,
+  BorderRadius,
   JustifyContent,
   TextColor,
   TextVariant,
@@ -51,6 +53,7 @@ export const BridgeQuoteCard = () => {
   const { activeQuote } = useSelector(getBridgeQuotes);
   const currency = useSelector(getCurrentCurrency);
   const ticker = useSelector(getNativeCurrency);
+  const { isEstimatedReturnLow } = useSelector(getValidationErrors);
 
   const trackCrossChainSwapsEvent = useCrossChainSwapsEventTracker();
   const { quoteRequestProperties } = useRequestProperties();
@@ -166,15 +169,28 @@ export const BridgeQuoteCard = () => {
               </Row>
             </Row>
 
-            <Row>
+            <Row
+              backgroundColor={
+                isEstimatedReturnLow ? BackgroundColor.warningMuted : undefined
+              }
+              borderRadius={isEstimatedReturnLow ? BorderRadius.LG : undefined}
+            >
               <Text
                 variant={TextVariant.bodyMdMedium}
-                color={TextColor.textAlternativeSoft}
+                color={
+                  isEstimatedReturnLow
+                    ? TextColor.warningDefault
+                    : TextColor.textAlternativeSoft
+                }
               >
                 {t('networkFees')}
               </Text>
               <Row gap={1}>
-                <Text>
+                <Text
+                  color={
+                    isEstimatedReturnLow ? TextColor.warningDefault : undefined
+                  }
+                >
                   {formatCurrencyAmount(
                     activeQuote.totalNetworkFee?.valueInCurrency,
                     currency,
@@ -186,10 +202,20 @@ export const BridgeQuoteCard = () => {
                       ticker,
                     )}
                 </Text>
-                <Text color={TextColor.textAlternativeSoft}>
+                <Text
+                  color={
+                    isEstimatedReturnLow
+                      ? TextColor.warningDefault
+                      : TextColor.textAlternativeSoft
+                  }
+                >
                   {t('bulletpoint')}
                 </Text>
-                <Text>
+                <Text
+                  color={
+                    isEstimatedReturnLow ? TextColor.warningDefault : undefined
+                  }
+                >
                   {activeQuote.totalNetworkFee?.valueInCurrency
                     ? formatTokenAmount(
                         locale,
