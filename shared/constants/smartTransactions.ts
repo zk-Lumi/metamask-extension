@@ -2,7 +2,7 @@ import { isProduction } from '../modules/environment';
 import { SECOND } from './time';
 import { CHAIN_IDS } from './network';
 
-export const FALLBACK_SMART_TRANSACTIONS_REFRESH_TIME: number = SECOND * 10;
+export const FALLBACK_SMART_TRANSACTIONS_REFRESH_TIME: number = SECOND * 1;
 export const FALLBACK_SMART_TRANSACTIONS_DEADLINE: number = 180;
 export const FALLBACK_SMART_TRANSACTIONS_EXPECTED_DEADLINE = 45;
 export const FALLBACK_SMART_TRANSACTIONS_MAX_DEADLINE = 150;
