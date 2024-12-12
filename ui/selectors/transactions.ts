@@ -21,9 +21,9 @@ import {
   createDeepEqualSelector,
   filterAndShapeUnapprovedTransactions,
 } from '../../shared/modules/selectors/util';
+import { MetaMaskSliceState } from '../ducks/metamask/metamask';
 import { getSelectedInternalAccount } from './accounts';
 import { hasPendingApprovals, getApprovalRequestsByType } from './approvals';
-import { MetaMaskReduxState } from '../store/store';
 
 const INVALID_INITIAL_TRANSACTION_TYPES = [
   TransactionType.cancel,
@@ -77,7 +77,7 @@ export type TransactionGroup = {
 };
 
 export const getTransactions = createDeepEqualSelector(
-  (state: MetaMaskReduxState) => {
+  (state: MetaMaskSliceState) => {
     const { transactions } = state.metamask.TxController ?? {};
 
     if (!transactions?.length) {
@@ -90,7 +90,7 @@ export const getTransactions = createDeepEqualSelector(
 );
 
 export const getCurrentNetworkTransactions = createDeepEqualSelector(
-  (state: MetaMaskReduxState) => {
+  (state: MetaMaskSliceState) => {
     const transactions = getTransactions(state);
 
     if (!transactions.length) {
@@ -107,17 +107,16 @@ export const getCurrentNetworkTransactions = createDeepEqualSelector(
 );
 
 export const getUnapprovedTransactions = createDeepEqualSelector(
-  (state: MetaMaskReduxState) => {
-    const currentNetworkTransactions = getCurrentNetworkTransactions(state);
+  getCurrentNetworkTransactions,
+  (currentNetworkTransactions) => {
     return filterAndShapeUnapprovedTransactions(currentNetworkTransactions);
   },
-  (transactions) => transactions,
 );
 
 // Unlike `getUnapprovedTransactions` and `getCurrentNetworkTransactions`
 // returns the total number of unapproved transactions on all networks
 export const getAllUnapprovedTransactions = createDeepEqualSelector(
-  (state: MetaMaskReduxState) => {
+  (state: MetaMaskSliceState) => {
     const { transactions } = state.metamask.TxController ?? [];
     if (!transactions?.length) {
       return [];
@@ -133,7 +132,7 @@ export const getAllUnapprovedTransactions = createDeepEqualSelector(
 );
 
 export const getApprovedAndSignedTransactions = createDeepEqualSelector(
-  (state: MetaMaskReduxState) => {
+  (state: MetaMaskSliceState) => {
     // Fetch transactions across all networks to address a nonce management limitation.
     // This issue arises when a pending transaction exists on one network, and the user initiates another transaction on a different network.
     const transactions = getTransactions(state);
@@ -148,7 +147,7 @@ export const getApprovedAndSignedTransactions = createDeepEqualSelector(
 );
 
 export const incomingTxListSelector = createDeepEqualSelector(
-  (state: MetaMaskReduxState) => {
+  (state: MetaMaskSliceState) => {
     const { incomingTransactionsPreferences } =
       state.metamask.PreferencesController;
     if (!incomingTransactionsPreferences) {
@@ -167,19 +166,19 @@ export const incomingTxListSelector = createDeepEqualSelector(
   (transactions) => transactions,
 );
 
-export const unapprovedPersonalMsgsSelector = (state: MetaMaskReduxState) =>
+export const unapprovedPersonalMsgsSelector = (state: MetaMaskSliceState) =>
   state.metamask.SignatureController.unapprovedPersonalMsgs;
-export const unapprovedDecryptMsgsSelector = (state: MetaMaskReduxState) =>
+export const unapprovedDecryptMsgsSelector = (state: MetaMaskSliceState) =>
   state.metamask.DecryptMessageController.unapprovedDecryptMsgs;
 export const unapprovedEncryptionPublicKeyMsgsSelector = (
-  state: MetaMaskReduxState,
+  state: MetaMaskSliceState,
 ) =>
   state.metamask.EncryptionPublicKeyController
     .unapprovedEncryptionPublicKeyMsgs;
-export const unapprovedTypedMessagesSelector = (state: MetaMaskReduxState) =>
+export const unapprovedTypedMessagesSelector = (state: MetaMaskSliceState) =>
   state.metamask.SignatureController.unapprovedTypedMessages;
 
-export const smartTransactionsListSelector = (state: MetaMaskReduxState) => {
+export const smartTransactionsListSelector = (state: MetaMaskSliceState) => {
   const { address: selectedAddress } = getSelectedInternalAccount(state);
   return state.metamask.SmartTransactionsController.smartTransactionsState?.smartTransactions?.[
     getCurrentChainId(state)
@@ -716,7 +715,7 @@ const TRANSACTION_APPROVAL_TYPES = [
   ApprovalType.PersonalSign,
 ];
 
-export function hasTransactionPendingApprovals(state: MetaMaskReduxState) {
+export function hasTransactionPendingApprovals(state: MetaMaskSliceState) {
   const unapprovedTxRequests = getApprovalRequestsByType(
     state,
     ApprovalType.Transaction,
@@ -728,7 +727,7 @@ export function hasTransactionPendingApprovals(state: MetaMaskReduxState) {
 }
 
 export function selectTransactionMetadata(
-  state: MetaMaskReduxState,
+  state: MetaMaskSliceState,
   transactionId: string,
 ) {
   return state.metamask.TxController.transactions.find(
@@ -737,7 +736,7 @@ export function selectTransactionMetadata(
 }
 
 export const selectTransactionSender = createSelector(
-  (state: MetaMaskReduxState, transactionId: string) =>
+  (state: MetaMaskSliceState, transactionId: string) =>
     selectTransactionMetadata(state, transactionId),
   (transaction) => transaction?.txParams?.from,
 );

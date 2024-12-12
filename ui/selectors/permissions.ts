@@ -23,6 +23,9 @@ import {
 import type { ConnectedSubject } from './selectors.types';
 import { getSelectedInternalAccount } from './accounts';
 import type { MetaMaskReduxState } from '../store/store';
+import { BackgroundStateProxy } from '../../shared/types/metamask';
+import { ControllerState } from '../ducks/metamask/metamask';
+import { createSelector } from 'reselect';
 
 // selectors
 
@@ -33,7 +36,7 @@ import type { MetaMaskReduxState } from '../store/store';
  * @returns {object} The permissions subjects object.
  */
 export const getPermissionSubjectsDeepEqual = createDeepEqualSelector(
-  (state: MetaMaskReduxState) =>
+  (state: ControllerState<'PermissionController'>) =>
     state.metamask.PermissionController.subjects ?? {},
   (subjects) => subjects,
 );
@@ -45,7 +48,7 @@ export const getPermissionSubjectsDeepEqual = createDeepEqualSelector(
  * @returns {object} The subject metadata object.
  */
 export const getSubjectMetadataDeepEqual = createDeepEqualSelector(
-  (state: MetaMaskReduxState) =>
+  (state: ControllerState<'SubjectMetadataController'>) =>
     state.metamask.SubjectMetadataController.subjectMetadata,
   (metadata) => metadata,
 );
@@ -56,7 +59,9 @@ export const getSubjectMetadataDeepEqual = createDeepEqualSelector(
  * @param {object} state - The current state.
  * @returns {object} The permissions subjects object.
  */
-export function getPermissionSubjects(state: MetaMaskReduxState) {
+export function getPermissionSubjects(
+  state: ControllerState<'PermissionController'>,
+) {
   return state.metamask.PermissionController.subjects ?? {};
 }
 
@@ -69,7 +74,7 @@ export function getPermissionSubjects(state: MetaMaskReduxState) {
  * @returns {Array<string>} An empty array or an array of accounts.
  */
 export function getPermittedAccounts(
-  state: MetaMaskReduxState,
+  state: ControllerState<'PermissionController'>,
   origin: string,
 ) {
   return getAccountsFromPermission(
@@ -77,7 +82,10 @@ export function getPermittedAccounts(
   );
 }
 
-export function getPermittedChains(state: MetaMaskReduxState, origin: string) {
+export function getPermittedChains(
+  state: ControllerState<'PermissionController'>,
+  origin: string,
+) {
   return getChainsFromPermission(
     getChainsPermissionFromSubject(subjectSelector(state, origin)),
   );
@@ -90,23 +98,27 @@ export function getPermittedChains(state: MetaMaskReduxState, origin: string) {
  * @param {object} state - The current state.
  * @returns {Array<string>} An empty array or an array of accounts.
  */
-export function getPermittedAccountsForCurrentTab(state: MetaMaskReduxState) {
+export function getPermittedAccountsForCurrentTab(
+  state: ControllerState<'PermissionController'>,
+) {
   return getPermittedAccounts(state, getOriginOfCurrentTab(state));
 }
 
 export function getPermittedAccountsForSelectedTab(
-  state: MetaMaskReduxState,
+  state: ControllerState<'PermissionController'>,
   activeTab: MetaMaskReduxState['activeTab'],
 ) {
   return getPermittedAccounts(state, activeTab.origin);
 }
 
-export function getPermittedChainsForCurrentTab(state: MetaMaskReduxState) {
+export function getPermittedChainsForCurrentTab(
+  state: ControllerState<'PermissionController'>,
+) {
   return getPermittedAccounts(state, getOriginOfCurrentTab(state));
 }
 
 export function getPermittedChainsForSelectedTab(
-  state: MetaMaskReduxState,
+  state: ControllerState<'PermissionController'>,
   activeTab: MetaMaskReduxState['activeTab'],
 ) {
   return getPermittedChains(state, activeTab.origin);
@@ -118,7 +130,9 @@ export function getPermittedChainsForSelectedTab(
  * @param {object} state - The current state.
  * @returns {object} Permitted accounts by origin.
  */
-export function getPermittedAccountsByOrigin(state: MetaMaskReduxState) {
+export function getPermittedAccountsByOrigin(
+  state: ControllerState<'PermissionController'>,
+) {
   const subjects = getPermissionSubjects(state);
   return Object.keys(subjects).reduce<Record<string, string[]>>(
     (acc, subjectKey) => {
@@ -132,7 +146,9 @@ export function getPermittedAccountsByOrigin(state: MetaMaskReduxState) {
   );
 }
 
-export function getPermittedChainsByOrigin(state: MetaMaskReduxState) {
+export function getPermittedChainsByOrigin(
+  state: ControllerState<'PermissionController'>,
+) {
   const subjects = getPermissionSubjects(state);
   return Object.keys(subjects).reduce<Record<string, Json[]>>(
     (acc, subjectKey) => {
@@ -146,7 +162,9 @@ export function getPermittedChainsByOrigin(state: MetaMaskReduxState) {
   );
 }
 
-export function getSubjectMetadata(state: MetaMaskReduxState) {
+export function getSubjectMetadata(
+  state: ControllerState<'SubjectMetadataController'>,
+) {
   return state.metamask.SubjectMetadataController.subjectMetadata;
 }
 
@@ -161,7 +179,9 @@ export function getSubjectMetadata(state: MetaMaskReduxState) {
  * @returns {Array<object>} An array of connected subject objects.
  */
 export function getConnectedSubjectsForSelectedAddress(
-  state: MetaMaskReduxState,
+  state: ControllerState<
+    'AccountsController' | 'PermissionController' | 'SubjectMetadataController'
+  >,
 ) {
   const selectedInternalAccount = getSelectedInternalAccount(state);
   const subjects = getPermissionSubjects(state);

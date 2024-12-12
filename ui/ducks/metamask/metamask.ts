@@ -38,7 +38,12 @@ export type MetaMaskSliceState = {
   metamask: BackgroundStateProxy;
 };
 
-/**
+export type ControllerState<ControllerName extends keyof BackgroundStateProxy> =
+  {
+    metamask: Pick<BackgroundStateProxy, ControllerName>;
+  };
+
+/**s
  * Temporary types for this slice so that inference of MetaMask state tree can
  * occur
  *
