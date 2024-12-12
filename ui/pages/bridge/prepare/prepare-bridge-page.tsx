@@ -129,7 +129,6 @@ const PrepareBridgePage = () => {
     activeQuote: activeQuote_,
     isQuoteGoingToRefresh,
     quotesLastFetchedMs,
-    quotesRefreshCount,
   } = useSelector(getBridgeQuotes);
   const { refreshRate } = useSelector(getBridgeQuotesConfig);
 
