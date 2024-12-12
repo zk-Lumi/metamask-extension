@@ -87,7 +87,6 @@ const PermitSimulation: React.FC<object> = () => {
                 <TokenDetail
                   token={token}
                   amount={amount}
-                  i={i}
                   key={`${token}-${i}`}
                 />
               ),
