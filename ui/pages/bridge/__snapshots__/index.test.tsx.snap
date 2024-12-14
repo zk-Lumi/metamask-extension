@@ -87,6 +87,7 @@ exports[`Bridge renders the component with initial props 1`] = `
                               alt="ETH logo"
                               class="mm-avatar-token__token-image"
                               src="./images/eth_logo.svg"
+                              title="ETH"
                             />
                           </div>
                           <div
@@ -99,6 +100,7 @@ exports[`Bridge renders the component with initial props 1`] = `
                                 alt="Ethereum Mainnet logo"
                                 class="mm-avatar-network__network-image"
                                 src="./images/eth_logo.svg"
+                                title="Ethereum Mainnet"
                               />
                             </div>
                           </div>
@@ -216,6 +218,7 @@ exports[`Bridge renders the component with initial props 1`] = `
                                 alt="Ethereum Mainnet logo"
                                 class="mm-avatar-network__network-image"
                                 src="./images/eth_logo.svg"
+                                title="Ethereum Mainnet"
                               />
                             </div>
                           </div>
